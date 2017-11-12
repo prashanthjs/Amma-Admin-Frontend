@@ -1,0 +1,75 @@
+
+<form [formGroup]="formService.form" novalidate="" (ngSubmit)="formService.submit($event)">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ formService.result?._id ? 'Edit order - shipping: '+ formService.result._id : ''}}
+    </h4>
+    <button class="close pull-right" type="button" aria-label="Close" (click)="modalRef.hide()"><span aria-hidden="true">×</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-12">
+        <app-form-messages></app-form-messages>
+      </div>
+      <div class="col-xs-12">
+        <div class="row">
+          <div class="col-xs-6">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('name').touched && formService.form.get('name').errors}">
+              <label>Name
+              </label>
+              <input class="form-control" type="text" formControlName="name">
+              <div *ngIf="formService.form.get('name').touched && formService.form.get('name').errors"><small class="text-danger" *ngIf="formService.form.get('name').hasError('required')">Please enter name</small>
+              </div>
+            </fieldset>
+          </div>
+          <div class="col-xs-6">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('trackingNumber').touched && formService.form.get('trackingNumber').errors}">
+              <label>Tracking number
+              </label>
+              <input class="form-control" type="text" formControlName="trackingNumber">
+              <div *ngIf="formService.form.get('trackingNumber').touched && formService.form.get('trackingNumber').errors"><small class="text-danger" *ngIf="formService.form.get('trackingNumber').hasError('required')">Please enter tracking number</small>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('shippingStatus').touched && formService.form.get('shippingStatus').errors}">
+              <label> Shipping Status</label>
+              <app-search-select-input formControlName="shippingStatus" [searchFunc]="searchShippingStatuses"></app-search-select-input>
+              <div *ngIf="formService.form.get('shippingStatus').touched && formService.form.get('shippingStatus').errors"><small class="text-danger" *ngIf="formService.form.get('shippingStatus').hasError('required')">Please select shipping status</small>
+              </div>
+            </fieldset>
+          </div>
+          <div class="col-xs-6">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('createdAt').touched && formService.form.get('createdAt').errors}">
+              <label>Created At</label>
+              <kendo-datepicker class="form-control" formControlName="createdAt" [format]="'dd/MM/y'"></kendo-datepicker>
+              <div *ngIf="formService.form.get('createdAt').touched && formService.form.get('createdAt').errors"><small class="text-danger" *ngIf="formService.form.get('createdAt').hasError('required')">Please select date</small>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <div class="row" formGroupName="notes">
+          <div class="col-xs-6">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('notes').get('customer').touched && formService.form.get('notes').get('customer').errors}">
+              <label>Customer notes
+              </label>
+              <input class="form-control" type="text" formControlName="customer">
+            </fieldset>
+          </div>
+          <div class="col-xs-6">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('notes').get('staff').touched && formService.form.get('notes').get('staff').errors}">
+              <label>Staff notes
+              </label>
+              <input class="form-control" type="text" formControlName="staff">
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="submit" [disabled]="!formService.form.valid" (submit)="submit($event)">Save</button>
+    <button class="btn btn-secondary" type="button" (click)="modalRef.hide()">Close</button>
+  </div>
+</form>

@@ -1,0 +1,46 @@
+include ../../../layouts/view-helpers/common
+
+- formName = 'formService.form';
+- modalName = 'modalRef';
+- formSubmit = 'formService.submit'
+
++app-modal
+    +app-form(formName, formSubmit)
+        +app-modal-header(modalName)
+            | {{ formService.result?.name ? 'Edit mart: '+ formService.result.name : 'Create mart'}}
+        +app-modal-body
+            .row
+                .col-xs-4
+                    +app-modal-image-upload('categoryFileUpload')
+                        app-file-input(#categoryFileUpload, formControlName='imgToken', type='category')
+                .col-xs-8
+                    - name = 'title'
+                    - control = parseControl([formName, name])
+                    - label = 'Title'
+                    +app-form-input-group(control, name, label)
+
+                    - name = 'parent'
+                    - control = parseControl([formName, name])
+                    +app-form-group(control)
+                        label  Parent category
+                        app-search-select-input(formControlName=name, [searchFunc] = 'searchCategory')
+
+                    - name = 'isActive';
+                    - control = parseControl([formName, name])
+                    +app-form-group(control)
+                        label  Is Active?
+                        div.col-xs-12
+                            label.radio-inline
+                                input(type='radio', [value]='true', formControlName=name, [checked]= control + ".value === true")
+                                |  Yes
+                            label.radio-inline
+                                input(type='radio', [value]='false',formControlName=name, [checked]= control + ".value === false")
+                                |  No
+            .row
+                .col-xs-12
+                    h3 Description
+                    hr
+                    - name = 'description'
+                    textarea.form-control(formControlName=name)
+
+        +app-modal-footer(formName, modalName)

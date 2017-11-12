@@ -1,0 +1,64 @@
+include ../../../../../layouts/view-helpers/common
+
+- formName = 'formService.form';
+- modalName = 'modalRef';
+- formSubmit = 'formService.submit'
+
++app-modal
+  +app-form(formName, formSubmit)
+    +app-modal-header(modalName)
+      | {{ formService.result?._id ? 'Edit order - shipping: '+ formService.result._id : ''}}
+    +app-modal-body
+      .row
+        .col-xs-6
+          - name = 'name'
+          - control = parseControl([formName, name])
+          - label = 'Name'
+          +app-form-input-group(control, name, label)
+            +app-form-errors(control)
+              +app-form-error(control, 'required')
+                | Please enter name
+
+        .col-xs-6
+          - name = 'trackingNumber'
+          - control = parseControl([formName, name])
+          - label = 'Tracking number'
+          +app-form-input-group(control, name, label)
+            +app-form-errors(control)
+              +app-form-error(control, 'required')
+                | Please enter tracking number
+      .row
+        .col-xs-6
+          - name = 'shippingStatus'
+          - control = parseControl([formName, name])
+          +app-form-group(control)
+            label  Shipping Status
+            app-search-select-input( formControlName=name, [searchFunc] = 'searchShippingStatuses')
+            +app-form-errors(control)
+              +app-form-error(control, 'required')
+                | Please select shipping status
+        .col-xs-6
+          - name = 'createdAt'
+          - control = parseControl([formName, name])
+          +app-form-group(control)
+            label Created At
+            kendo-datepicker.form-control(formControlName=name, [format]="'dd/MM/y'")
+            +app-form-errors(control)
+              +app-form-error(control, 'required')
+                | Please select date
+
+      - groupName = 'notes'
+      .row(formGroupName=groupName)
+        .col-xs-6
+          - name = 'customer'
+          - control = parseControl([formName, groupName, name])
+          - label = 'Customer notes'
+          +app-form-input-group(control, name, label)
+
+        .col-xs-6
+          - name = 'staff'
+          - control = parseControl([formName, groupName, name])
+          - label = 'Staff notes'
+          +app-form-input-group(control, name, label)
+
+    +app-modal-footer(formName, modalName)

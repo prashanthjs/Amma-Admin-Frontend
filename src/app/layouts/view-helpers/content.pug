@@ -1,0 +1,72 @@
+mixin app-page-title()
+  .row.wrapper.border-bottom.white-bg.page-heading&attributes(attributes)
+    block
+
+mixin app-page-title-with-model-with-custom-actions(model)
+  - model = model ? model: "viewResource.model"
+  .row.wrapper.border-bottom.white-bg.page-heading(*ngIf = model)&attributes(attributes)
+    block
+
+mixin app-page-content-with-model(model)
+  - model = model ? model: "viewResource.model"
+  .row(*ngIf = model)&attributes(attributes)
+    .col-lg-12
+      .wrapper.wrapper-content
+        .animated.fadeInRightBig
+          block
+
+mixin app-page-content()
+  .row&attributes(attributes)
+    .col-lg-12
+      .wrapper.wrapper-content
+        .animated.fadeInRightBig
+          block
+
+mixin app-modal()
+  block
+
+
+mixin app-modal-header(modalName)
+  .modal-header
+    h4.modal-title.pull-left
+      block
+    button.close.pull-right(type='button', aria-label='Close', (click)=modalName + '.hide()')
+      span(aria-hidden='true') ×
+
+mixin app-modal-body
+  .modal-body
+    .row
+      .col-xs-12
+        app-form-messages()
+      .col-xs-12
+        block
+
+mixin app-modal-footer(formName, modalName)
+  - formName = formName ? formName: "form"
+  .modal-footer
+    button.btn.btn-primary(type='submit', [disabled]= "!" + formName + ".valid", (submit)= "submit($event)") Save
+    button.btn.btn-secondary(type='button', (click)= modalName + '.hide()') Close
+
+
+mixin app-modal-image-upload(elementName)
+  .row
+    .col-xs-12.profile-pic(*ngIf = elementName + '.files && ' + elementName + '.files.length')
+      carousel([interval]='5000', [noWrap]='false')
+        slide(template = 'ngFor let image of ' + elementName + '.files')
+          img.col-xs-12.img-responsive([src]='image.url', style='margin:auto;')
+    .col-xs-12.profile-pic(*ngIf = '!(' + elementName + '.files && ' + elementName + '.files.length)')
+      img(src= 'http://placehold.it/250X250?text=Upload+image')
+
+  .row(*ngIf = elementName + '.files && ' + elementName + '.files.length')
+    .col-xs-4.thumbnail-wrapper(template ='ngFor let image of ' + elementName + '.files')
+      img.img-responsive.img-thumbnail([src]='image.url')
+      button.btn.btn-danger.btn-circle(type='button', mwlConfirmationPopover,title= "Delete Image", [message] = "'Do you want to remove ' + image.fileName + '?'",  (confirm)=elementName + '.removeFile(image.fileName)')
+        i.glyphicon.glyphicon-remove
+  .row
+    .col-xs-12
+      label.btn.btn-block.btn-primary
+        span.glyphicon.glyphicon-refresh.spinning
+        =  "{{" + elementName + ".loading?'Uploading...': 'Upload'}}"
+        block
+
+

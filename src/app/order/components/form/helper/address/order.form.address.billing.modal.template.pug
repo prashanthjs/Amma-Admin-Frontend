@@ -1,0 +1,65 @@
+include ../../../../../layouts/view-helpers/common
+
+- formName = 'formService.form';
+- modalName = 'modalRef';
+- formSubmit = 'formService.submit'
+
++app-modal
+  +app-form(formName, formSubmit)
+    +app-modal-header(modalName)
+      | {{ formService.result?._id ? 'Edit order billing address: '+ formService.result._id : ''}}
+    +app-modal-body
+      .row
+        .col-xs-12
+          .row
+            .col-xs-6
+              - name = 'addressLine1'
+              - control = parseControl([formName,  name])
+              - label = 'Address Line1'
+              +app-form-input-group(control, name, label)
+                +app-form-errors(control)
+                  +app-form-error(control, 'required')
+                    | Please enter address line 1
+
+            .col-xs-6
+              - name = 'addressLine2'
+              - control = parseControl([formName,  name])
+              - label = 'Address Line2'
+              +app-form-input-group(control, name, label)
+
+          .row
+            .col-xs-6
+              - name = 'town'
+              - control = parseControl([formName,  name])
+              - label = 'Town/City'
+              +app-form-input-group(control, name, label)
+                +app-form-errors(control)
+                  +app-form-error(control, 'required')
+                    | Please enter town/city
+
+            .col-xs-6
+              - name = 'county'
+              - control = parseControl([formName, name])
+              - label = 'County'
+              +app-form-input-group(control, name, label)
+
+          .row
+            .col-xs-6
+              - name = 'country'
+              - control = parseControl([formName,  name])
+              - label = 'Country'
+              +app-form-input-group(control, name, label)
+                +app-form-errors(control)
+                  +app-form-error(control, 'required')
+                    | Please enter country
+
+            .col-xs-6
+              - name = 'postcode'
+              - control = parseControl([formName,name])
+              - label = 'Postcode'
+              +app-form-input-group(control, name, label)
+                +app-form-errors(control)
+                  +app-form-error(control, 'required')
+                    | Please enter postcode
+
+    +app-modal-footer(formName, modalName)

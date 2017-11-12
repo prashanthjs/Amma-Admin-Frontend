@@ -1,0 +1,65 @@
+include  ../../../../../layouts/view-helpers/common
++app-page-title
+  .col-sm-4
+    h2 User summary - daily
+    ol.breadcrumb
+      li
+        a(routerLink='/') Home
+      li.active
+        | Reports
+      li.active
+        | User Summary
+      li.active
+        strong  Daily
+
++app-page-content
+  .row.clearfix
+    .col-md-4.pull-right
+      .input-group.m-b-md(daterangepicker='', (selected)='selectedDate($event)')
+        span.form-control.uneditable-input(name='daterange')
+          | {{ date.start | date:'medium' }} - {{ date.end| date:'medium' }}
+        span.input-group-btn
+          a.btn.btn-default(type='button')
+            i.glyphicon.glyphicon-calendar
+  .row
+    .col-md-12
+      .ibox.float-e-margins
+        .ibox-title
+          h5 Summary
+          .pull-right
+            .btn-group
+              a.btn.btn-xs.btn-white.active([routerLink]="['/report/user/summary/day']") Day
+              a.btn.btn-xs.btn-white([routerLink]="['/report/user/summary/month']") Monthly
+              a.btn.btn-xs.btn-white([routerLink]="['/report/user/summary/year']") Annually
+        .ibox-content(*ngIf != 'chartLabel?.length')
+          canvas(baseChart,
+          [colors]="chartCountColors",
+          [options]='chartCountOptions',
+          [datasets]='chartCountData',
+          [labels]='chartLabel',
+          [legend]="'true'",
+          [chartType]="'line'")
+
+        .ibox-content(*ngIf != '!chartLabel?.length')
+          p.text-center No data to display
+
+
+  .ibox
+    .ibox-content(*ngIf != 'result?.length')
+      table.table.table-striped.table-bordered
+        thead
+          tr
+            th #
+            th Name
+            th Total
+        tbody
+          template(ngFor let-item [ngForOf] = "result"  let-i = "index")
+            tr
+              td {{i+1}}
+              td {{item._id}}
+              td {{item.total}}
+
+
+
+
+

@@ -1,0 +1,53 @@
+include ../../../layouts/view-helpers/common
+
+- formName = 'formService.form';
+- modalName = 'modalRef';
+- formSubmit = 'formService.submit'
+
++app-modal
+  +app-form(formName, formSubmit)
+    +app-modal-header(modalName)
+      | {{ formService.result?.name ? 'Edit payment method: '+ formService.result.name : 'Create payment method'}}
+    +app-modal-body
+      .row
+        .col-xs-6
+          - name = 'title'
+          - control = parseControl([formName, name])
+          - label = 'Title'
+          +app-form-input-group(control, name, label)
+        .col-xs-6
+          - name = 'isActive';
+          - control = parseControl([formName, name])
+          +app-form-group(control)
+            label  Is Active?
+            div.col-xs-12
+              label.radio-inline
+                input(type='radio', [value]='true', formControlName=name, [checked]= control + ".value === true")
+                |  Yes
+              label.radio-inline
+                input(type='radio', [value]='false',formControlName=name, [checked]= control + ".value === false")
+                |  No
+
+      - groupName = 'surcharge'
+      .row(formGroupName = groupName)
+        .col-xs-6
+          - name = 'amount'
+          - control = parseControl([formName, groupName, name])
+          +app-form-group(control)
+            label Surcharge
+            .input-group
+              span.input-group-addon {{ configService.currencySymbol }}
+              input.form-control(type="number", formControlName=name)
+            +app-form-errors(control)
+              +app-form-error(control, 'number')
+                | Please enter number
+        .col-xs-6
+          - name = 'type';
+          - control = parseControl([formName, groupName,  name])
+          +app-form-group(control)
+            label  Surcharge Type
+            select.form-control(formControlName=name)
+              option(value="percentage") Percentage
+              option(value="absolute") Absolute
+              
+    +app-modal-footer(formName, modalName)

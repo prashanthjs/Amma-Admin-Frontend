@@ -1,0 +1,100 @@
+include  ../../../../layouts/view-helpers/common
++app-page-title
+  .col-sm-4
+    h2 Top users
+    ol.breadcrumb
+      li
+        a(routerLink='/') Home
+      li
+        | Reports
+      li.active
+        strong Top users
+
+
++app-page-content
+  .row.clearfix
+    .col-md-4.pull-right
+      .input-group.m-b-md(daterangepicker='', (selected)='selectedDate($event)')
+        span.form-control.uneditable-input(name='daterange')
+          | {{ date.start | date:'medium' }} - {{ date.end| date:'medium' }}
+        span.input-group-btn
+          a.btn.btn-default(type='button')
+            i.glyphicon.glyphicon-calendar
+
+  .row
+    .col-md-6
+      .ibox
+        .ibox-title
+          h5 Top users by amount
+        .ibox-content(*ngIf != 'chartAmountLabel && chartAmountLabel.length')
+          canvas(baseChart,
+          [colors]="chartAmountColors",
+          [datasets]='chartAmountData',
+          [labels]='chartAmountLabel',
+          [options]='chartAmountOptions', [legend]="'true'",
+          [chartType]="'bar'")
+
+        .ibox-content(*ngIf != '!(chartAmountLabel && chartAmountLabel.length)')
+          p.text-center No data to display
+
+    .col-md-6
+      .ibox
+        .ibox-title
+          h5 Top users by count
+        .ibox-content(*ngIf != 'chartCountLabel?.length')
+          canvas(baseChart,
+          [colors]="chartCountColors",
+          [datasets]='chartCountData',
+          [labels]='chartCountLabel',
+          [options]='chartCountOptions', [legend]="'true'",
+          [chartType]="'bar'")
+
+        .ibox-content(*ngIf != '!chartAmountLabel?.length')
+          p.text-center No data to display
+  .row
+    .col-md-6
+      .ibox
+        .ibox-content(*ngIf != 'amountResult?.length')
+          table.table.table-striped.table-bordered
+            thead
+              tr
+                th #
+                th Name
+                th Amount
+                th
+            tbody
+              template(ngFor let-item [ngForOf] = "amountResult"  let-i = "index")
+                tr
+                  td {{i+1}}
+                  td {{item._id}}
+                  td {{item.total| currency: configService.currencyCode:true}}
+
+                  td
+                    a.btn.btn-primary.btn-sm([routerLink]="['/user/list', item._id]")
+                      i.glyphicon.glyphicon-eye-open
+
+    .col-md-6
+      .ibox
+        .ibox-content(*ngIf != 'countResult?.length')
+          table.table.table-striped.table-bordered
+            thead
+              tr
+                th #
+                th Name
+                th Total
+                th
+            tbody
+              template(ngFor let-item [ngForOf] = "countResult"  let-i = "index")
+                tr
+                  td {{i+1}}
+                  td {{item._id}}
+                  td {{item.total}}
+
+                  td
+                    a.btn.btn-primary.btn-sm([routerLink]="['/user/list', item._id]")
+                      i.glyphicon.glyphicon-eye-open
+
+
+
+
+

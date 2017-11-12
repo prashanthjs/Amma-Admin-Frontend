@@ -1,0 +1,107 @@
+
+<form [formGroup]="formService.form" novalidate="" (ngSubmit)="formService.submit($event)">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ formService.result?._id ? 'Edit order: '+ formService.result._id : 'Create order'}}
+    </h4>
+    <button class="close pull-right" type="button" aria-label="Close" (click)="modalRef.hide()"><span aria-hidden="true">×</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-12">
+        <app-form-messages></app-form-messages>
+      </div>
+      <div class="col-xs-12">
+        <div class="row" formGroupName="user">
+          <div class="col-xs-12">
+            <div class="row">
+              <div class="col-xs-6">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('user').get('username').touched && formService.form.get('user').get('username').errors}">
+                  <label> Username</label>
+                  <app-search-select-input formControlName="username" valueField="username" [searchFunc]="searchUsers"></app-search-select-input>
+                  <div *ngIf="formService.form.get('user').get('username').touched && formService.form.get('user').get('username').errors"><small class="text-danger" *ngIf="formService.form.get('user').get('username').hasError('required')">Please select username</small>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="row">
+              <div class="col-xs-4">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('user').get('firstName').touched && formService.form.get('user').get('firstName').errors}">
+                  <label>First Name
+                  </label>
+                  <input class="form-control" type="text" formControlName="firstName">
+                  <div *ngIf="formService.form.get('user').get('firstName').touched && formService.form.get('user').get('firstName').errors"><small class="text-danger" *ngIf="formService.form.get('user').get('firstName').hasError('required')">Please enter first name</small>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="col-xs-4">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('user').get('middleName').touched && formService.form.get('user').get('middleName').errors}">
+                  <label>Middle Name
+                  </label>
+                  <input class="form-control" type="text" formControlName="middleName">
+                  <div *ngIf="formService.form.get('user').get('middleName').touched && formService.form.get('user').get('middleName').errors"><small class="text-danger" *ngIf="formService.form.get('user').get('middleName').hasError('required')">Please enter middle name</small>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="col-xs-4">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('user').get('lastName').touched && formService.form.get('user').get('lastName').errors}">
+                  <label>Last Name
+                  </label>
+                  <input class="form-control" type="text" formControlName="lastName">
+                  <div *ngIf="formService.form.get('user').get('lastName').touched && formService.form.get('user').get('lastName').errors"><small class="text-danger" *ngIf="formService.form.get('user').get('lastName').hasError('required')">Please enter last name</small>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="row">
+              <div class="col-xs-6">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('user').get('email').touched && formService.form.get('user').get('email').errors}">
+                  <label>Email
+                  </label>
+                  <input class="form-control" type="email" formControlName="email">
+                  <div *ngIf="formService.form.get('user').get('email').touched && formService.form.get('user').get('email').errors"><small class="text-danger" *ngIf="formService.form.get('user').get('email').hasError('required')">Please enter email</small><small class="text-danger" *ngIf="formService.form.get('user').get('email').hasError('email')">Invalid email</small>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="col-xs-6">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('user').get('contactNumber').touched && formService.form.get('user').get('contactNumber').errors}">
+                  <label>Contact Number
+                  </label>
+                  <input class="form-control" type="text" formControlName="contactNumber">
+                  <div *ngIf="formService.form.get('user').get('contactNumber').touched && formService.form.get('user').get('contactNumber').errors"><small class="text-danger" *ngIf="formService.form.get('user').get('contactNumber').hasError('required')">Please enter contact number</small>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('orderStatus').touched && formService.form.get('orderStatus').errors}">
+              <label> Order Status</label>
+              <app-search-select-input formControlName="orderStatus" [searchFunc]="searchOrderStatus"></app-search-select-input>
+              <div *ngIf="formService.form.get('orderStatus').touched && formService.form.get('orderStatus').errors"><small class="text-danger" *ngIf="formService.form.get('orderStatus').hasError('required')">Please select order status</small>
+              </div>
+            </fieldset>
+          </div>
+          <div class="col-xs-6">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('referenceNumber').touched && formService.form.get('referenceNumber').errors}">
+              <label>Reference Number
+              </label>
+              <input class="form-control" type="text" formControlName="referenceNumber">
+              <div *ngIf="formService.form.get('referenceNumber').touched && formService.form.get('referenceNumber').errors"><small class="text-danger" *ngIf="formService.form.get('referenceNumber').hasError('required')">Please enter reference number</small>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="submit" [disabled]="!formService.form.valid" (submit)="submit($event)">Save</button>
+    <button class="btn btn-secondary" type="button" (click)="modalRef.hide()">Close</button>
+  </div>
+</form>

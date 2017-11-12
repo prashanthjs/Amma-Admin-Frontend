@@ -1,0 +1,112 @@
+include ../../../../layouts/view-helpers/common
+
+- modalName = 'modalRef';
+
++app-modal
+  +app-modal-header(modalName)
+    | View My profile
+  +app-modal-body
+    .row(*ngIf='model')
+      .col-xs-3
+        .ibox
+          .ibox-content
+            .center-block.clearfix
+              carousel([interval]='5000', [noWrap]='false', *ngIf = 'files?.length')
+                slide(template = 'ngFor let image of files')
+                  img.col-xs-12.img-responsive([src]='image.url', style='margin:auto;')
+              img(src= 'http://placehold.it/250X250?text=Upload+image', *ngIf = '!(files?.length)')
+      .col-xs-9
+        .ibox
+          .ibox-content
+            .row
+              .col-xs-6
+                ul.list-group.clear-list.m-t
+                  li.list-group-item.first-item
+                    span.pull-right {{ model.username}}
+                    span.font-bold Username
+                  li.list-group-item
+                    span.pull-right {{ model.firstName}}
+                    span.font-bold First name
+                  li.list-group-item
+                    span.pull-right {{ model.middleName}}
+                    span.font-bold Middle name
+                  li.list-group-item
+                    span.pull-right {{ model.lastName}}
+                    span.font-bold Last name
+                  li.list-group-item
+                    span.pull-right {{ model.gender| titlecase}}
+                    span.font-bold Gender
+                  li.list-group-item
+                    span.pull-right
+                      span.label.label-success(*ngIf='model.isActive')
+                        | Active
+                      span.label.label-danger(*ngIf='!model.isActive')
+                        | In Active
+                    span.font-bold Status
+
+                  li.list-group-item
+                    span.pull-right {{ model.createdAt | date:'medium' }}
+                    span.font-bold Created At
+
+              .col-xs-6
+                ul.list-group.clear-list.m-t
+                  li.list-group-item.first-item
+                    span.pull-right {{ model.email}}
+                    span.font-bold Email
+                  li.list-group-item
+                    span.pull-right {{ model.contactNumber}}
+                    span.font-bold Contact Number
+                  li.list-group-item
+                    span.pull-right {{ model.dob | date:'longDate'}}
+                    span.font-bold Dob
+
+                  li.list-group-item
+                    span.pull-right {{ model.mart.join(', ')}}
+                    span.font-bold Marts
+                  li.list-group-item
+                    span.pull-right {{ model.userGroup}}
+                    span.font-bold User Group
+                  li.list-group-item
+                    span.pull-right
+                      span.label.label-danger(*ngIf='model.isLocked')
+                        | Yes
+                      span.label.label-success(*ngIf='!model.isLocked')
+                        | No
+                    span.font-bold Is Locked?
+
+                  li.list-group-item
+                    span.pull-right {{ model.updatedAt | date:'medium' }}
+                    span.font-bold Updated At
+    .row(*ngIf='model')
+      .col-xs-12
+        .ibox
+          .ibox-title
+            h5 Address
+          .ibox-content
+            .row
+              .col-xs-6
+                ul.list-group.clear-list
+                  li.list-group-item.first-item
+                    span.pull-right {{ model.address.addressLine1}}
+                    span.font-bold Address Line 1
+                  li.list-group-item
+                    span.pull-right {{ model.address.addressLine2}}
+                    span.font-bold Address Line 2
+                  li.list-group-item
+                    span.pull-right {{ model.address.town}}
+                    span.font-bold Town/City
+              .col-xs-6
+                ul.list-group.clear-list
+                  li.list-group-item.first-item
+                    span.pull-right {{ model.address.county}}
+                    span.font-bold County
+                  li.list-group-item
+                    span.pull-right {{ model.address.country}}
+                    span.font-bold Country
+                  li.list-group-item
+                    span.pull-right {{ model.address.postcode}}
+                    span.font-bold Postcode
+
+  .modal-footer
+    button.btn.btn-secondary(type='button', (click)= modalName + '.hide()') Close
+

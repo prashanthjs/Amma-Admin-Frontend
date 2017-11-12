@@ -1,0 +1,146 @@
+include ../../../../../layouts/view-helpers/common
+
+- formName = 'formService.form';
+- modalName = 'modalRef';
+- formSubmit = 'formService.submit'
+
++app-modal
+  +app-form(formName, formSubmit)
+    +app-modal-header(modalName)
+      | {{ formService.result?._id ? 'Edit order item: '+ formService.result._id : ''}}
+    +app-modal-body
+      .row
+        .col-xs-4
+          - name = 'name'
+          - control = parseControl([formName, name])
+          +app-form-group(control)
+            label  Product name
+            app-search-select-input( formControlName=name, [searchFunc] = 'searchProducts')
+            +app-form-errors(control)
+              +app-form-error(control, 'required')
+                | Please select product
+
+        .col-xs-4
+          - name = 'title'
+          - control = parseControl([formName, name])
+          - label = 'Title'
+          +app-form-input-group(control, name, label)
+            +app-form-errors(control)
+              +app-form-error(control, 'required')
+                | Please enter title
+
+        .col-xs-4
+          - name = 'qty'
+          - control = parseControl([formName, name])
+          - label = 'QTY'
+          +app-form-input-group(control, name, label, 'number')
+            +app-form-errors(control)
+              +app-form-error(control, 'required')
+                | Please enter qty
+
+      - groupName = 'price'
+      .row(formGroupName=groupName)
+        .col-xs-4
+          - name = 'sell'
+          - control = parseControl([formName, groupName, name])
+          +app-form-group(control)
+            label Sell Price
+            .input-group
+              span.input-group-addon {{ configService.currencySymbol }}
+              input.form-control(type="number", formControlName=name)
+            +app-form-errors(control)
+              +app-form-error(control, 'required')
+                | Please enter sell price
+              +app-form-error(control, 'number')
+                | Please enter number
+        .col-xs-4
+          - name = 'cost'
+          - control = parseControl([formName, groupName, name])
+          +app-form-group(control)
+            label Cost Price
+            .input-group
+              span.input-group-addon {{ configService.currencySymbol }}
+              input.form-control(type="number", formControlName=name)
+            +app-form-errors(control)
+              +app-form-error(control, 'required')
+                | Please enter cost price
+              +app-form-error(control, 'number')
+                | Please enter number
+
+        .col-xs-4
+          - name = 'list'
+          - control = parseControl([formName, groupName, name])
+          +app-form-group(control)
+            label List Price
+            .input-group
+              span.input-group-addon {{ configService.currencySymbol }}
+              input.form-control(type="number", formControlName=name)
+            +app-form-errors(control)
+              +app-form-error(control, 'required')
+                | Please enter list price
+              +app-form-error(control, 'number')
+                | Please enter number
+
+      .row
+        - groupName = 'shipping';
+        .col-xs-12(formGroupName = groupName)
+          .row
+            .col-xs-12
+              .row
+                .col-xs-6
+                  - name = 'weight'
+                  - control = parseControl([formName, groupName, name])
+                  +app-form-group(control)
+                    label Weight
+                    .input-group
+                      input.form-control(type="number", formControlName=name)
+                      span.input-group-addon {{configService.weightSymbol}}
+                    +app-form-errors(control)
+                      +app-form-error(control, 'required')
+                        | Please enter weight
+                      +app-form-error(control, 'number')
+                        | Please enter number
+
+              - groupName1 = 'box';
+              .row(formGroupName=groupName1)
+                .col-xs-4
+                  - name = 'length'
+                  - control = parseControl([formName, groupName, groupName1, name])
+                  +app-form-group(control)
+                    label Length
+                    .input-group
+                      input.form-control(type="number", formControlName=name)
+                      span.input-group-addon {{configService.lengthSymbol}}
+                    +app-form-errors(control)
+                      +app-form-error(control, 'required')
+                        | Please enter length
+                      +app-form-error(control, 'number')
+                        | Please enter number
+                .col-xs-4
+                  - name = 'width'
+                  - control = parseControl([formName, groupName, groupName1, name])
+                  +app-form-group(control)
+                    label Width
+                    .input-group
+                      input.form-control(type="number", formControlName=name)
+                      span.input-group-addon {{configService.lengthSymbol}}
+                    +app-form-errors(control)
+                      +app-form-error(control, 'required')
+                        | Please enter width
+                      +app-form-error(control, 'number')
+                        | Please enter number
+                .col-xs-4
+                  - name = 'height'
+                  - control = parseControl([formName, groupName, groupName1, name])
+                  +app-form-group(control)
+                    label Height
+                    .input-group
+                      input.form-control(type="number", formControlName=name)
+                      span.input-group-addon {{configService.lengthSymbol}}
+                    +app-form-errors(control)
+                      +app-form-error(control, 'required')
+                        | Please enter height
+                      +app-form-error(control, 'number')
+                        | Please enter number
+
+    +app-modal-footer(formName, modalName)

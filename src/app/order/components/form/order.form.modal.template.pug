@@ -1,0 +1,96 @@
+include ../../../layouts/view-helpers/common
+
+- formName = 'formService.form';
+- modalName = 'modalRef';
+- formSubmit = 'formService.submit'
+
++app-modal
+  +app-form(formName, formSubmit)
+    +app-modal-header(modalName)
+      | {{ formService.result?._id ? 'Edit order: '+ formService.result._id : 'Create order'}}
+    +app-modal-body
+      - groupName = 'user'
+      .row(formGroupName = groupName)
+        .col-xs-12
+          .row
+            .col-xs-6
+              - name = 'username'
+              - control = parseControl([formName, groupName, name])
+              +app-form-group(control)
+                label  Username
+                app-search-select-input( formControlName=name, valueField='username', [searchFunc] = 'searchUsers')
+                +app-form-errors(control)
+                  +app-form-error(control, 'required')
+                    | Please select username
+
+        .col-xs-12
+          .row
+            .col-xs-4
+              - name = 'firstName'
+              - control = parseControl([formName, groupName, name])
+              - label = 'First Name'
+              +app-form-input-group(control, name, label)
+                +app-form-errors(control)
+                  +app-form-error(control, 'required')
+                    | Please enter first name
+
+            .col-xs-4
+              - name = 'middleName'
+              - control = parseControl([formName, groupName, name])
+              - label = 'Middle Name'
+              +app-form-input-group(control, name, label)
+                +app-form-errors(control)
+                  +app-form-error(control, 'required')
+                    | Please enter middle name
+
+            .col-xs-4
+              - name = 'lastName'
+              - control = parseControl([formName, groupName, name])
+              - label = 'Last Name'
+              +app-form-input-group(control, name, label)
+                +app-form-errors(control)
+                  +app-form-error(control, 'required')
+                    | Please enter last name
+
+        .col-xs-12
+          .row
+            .col-xs-6
+              - name = 'email'
+              - control = parseControl([formName, groupName, name])
+              - label = 'Email'
+              +app-form-input-group(control, name, label, 'email')
+                +app-form-errors(control)
+                  +app-form-error(control, 'required')
+                    | Please enter email
+                  +app-form-error(control, 'email')
+                    | Invalid email
+
+            .col-xs-6
+              - name = 'contactNumber'
+              - control = parseControl([formName, groupName, name])
+              - label = 'Contact Number'
+              +app-form-input-group(control, name, label)
+                +app-form-errors(control)
+                  +app-form-error(control, 'required')
+                    | Please enter contact number
+
+      .row
+        .col-xs-6
+          - name = 'orderStatus'
+          - control = parseControl([formName, name])
+          +app-form-group(control)
+            label  Order Status
+            app-search-select-input( formControlName=name, [searchFunc] = 'searchOrderStatus')
+            +app-form-errors(control)
+              +app-form-error(control, 'required')
+                | Please select order status
+        .col-xs-6
+          - name = 'referenceNumber'
+          - control = parseControl([formName, name])
+          - label = 'Reference Number'
+          +app-form-input-group(control, name, label)
+            +app-form-errors(control)
+              +app-form-error(control, 'required')
+                | Please enter reference number
+
+    +app-modal-footer(formName, modalName)

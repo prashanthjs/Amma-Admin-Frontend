@@ -1,0 +1,89 @@
+table.table.table-striped.table-bordered
+  thead
+    tr
+      th #
+      th Name
+      th Title
+      th Qty
+      th Price
+      th(*appHasPrivilege="['update-order-basic-privilege']")
+
+  tbody
+    template(ngFor let-item [ngForOf] = "viewResource.model.inItems"  let-i = "index")
+      tr.product
+        td {{i+1}}
+        td {{item.name}}
+        td {{item.title}}
+        td {{item.qty}}
+
+        td {{item.price.sell | currency: configService.currencyCode:true}}
+        td(*appHasPrivilege="['update-order-basic-privilege']")
+          button.btn.btn-primary.btn-sm((click)='openItem(i)')
+            i.glyphicon.glyphicon-pencil
+          button.btn.btn-danger.btn-sm.m-l-xs(mwlConfirmationPopover,title= "Delete Item", [message] = "'Do you want to remove?'",  (confirm)='removeItem(i)', placement='left')
+            i.glyphicon.glyphicon-remove
+          .btn-group.m-l-xs(dropdown)
+            button.btn.btn-warning.btn-sm.dropdown-toggle(dropdownToggle,type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+              i.glyphicon.glyphicon-menu-down
+            ul.dropdown-menu(*dropdownMenu)
+              li
+                a.dropdown-item(href='javascript:void(0);', (click)='openItemInItem(i)') Add InItem
+              li.dropdown-divider.divider
+              li
+                a.dropdown-item(href='javascript:void(0);', (click)='openItemOutItem(i)') Add OutItem
+
+      template(ngFor let-inItem [ngForOf] = "viewResource.model.inItems[i].inItems"  let-inItemIndex = "index")
+        tr
+          td
+          td {{inItem.name}}
+          td {{inItem.title}}
+          td.font-bold In Item
+          td {{inItem.price.sell | currency: configService.currencyCode:true}}
+          td(*appHasPrivilege="['update-order-basic-privilege']")
+            button.btn.btn-sm.btn-primary((click)='openItemInItem(i, inItemIndex)')
+              i.glyphicon.glyphicon-pencil
+            button.btn.btn-danger.btn-sm.m-l-xs(mwlConfirmationPopover,title= "Delete Item", [message] = "'Do you want to remove?'",  (confirm)='removeItemInItem(i,inItemIndex)', placement='left')
+              i.glyphicon.glyphicon-remove
+
+      template(*ngIf = "viewResource.model.inItems[i].outItems?.length", ngFor let-outItem [ngForOf] = "viewResource.model.inItems[i].outItems"  let-outItemIndex = "index")
+        tr
+          td
+          td {{outItem.name}}
+          td {{outItem.title}}
+          td.font-bold Out Item
+          td {{outItem.price.sell | currency: configService.currencyCode:true}}
+          td(*appHasPrivilege="['update-order-basic-privilege']")
+            button.btn.btn-sm.btn-primary((click)='openItemOutItem(i, outItemIndex)')
+              i.glyphicon.glyphicon-pencil
+            button.btn.btn-sm.btn-danger.m-l-xs(mwlConfirmationPopover,title= "Delete Item", [message] = "'Do you want to remove?'",  (confirm)='removeItemOutItem(i,outItemIndex)', placement='left')
+              i.glyphicon.glyphicon-remove
+
+      tr
+        td(colspan=4)
+          h4.text-right.font-bold Total Item Price
+        td(colspan=2)
+          h4.font-bold {{item.totalPrice.sell | currency: configService.currencyCode:true}}
+
+
+    tr(*ngIf = "!(viewResource.model.inItems?.length)")
+      td(colspan=6)
+        p No Items
+
+    template(*ngIf = "viewResource.model.outItems.length", ngFor, let-outItem, [ngForOf] = "viewResource.model.outItems",  let-outItemIndex = "index")
+      tr
+        td
+        td {{outItem.name}}
+        td {{outItem.title}}
+        td.font-bold Order Out Item
+        td {{outItem.price.sell | currency: configService.currencyCode:true}}
+        td(*appHasPrivilege="['update-order-basic-privilege']")
+          button.btn.btn-primary((click)='openOutItem(outItemIndex)')
+            i.glyphicon.glyphicon-pencil
+          button.btn.btn-danger.m-l-xs(mwlConfirmationPopover,title= "Delete Out Item", [message] = "'Do you want to remove?'",  (confirm)='removeOutItem(outItemIndex)', placement='left')
+            i.glyphicon.glyphicon-remove
+    tr.product
+      td(colspan=4)
+        h3.text-right.font-bold Grand Total
+      td(colspan=2)
+        h3.font-bold {{(viewResource.model.totalPrice?.sell || 0) | currency: configService.currencyCode:true}}
+

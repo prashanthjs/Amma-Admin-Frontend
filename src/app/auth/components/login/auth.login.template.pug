@@ -1,0 +1,25 @@
+include ../../../layouts/view-helpers/common
+
+- formName = 'form'
+
+.middle-box.text-center.loginscreen.animated.fadeInDown
+    div
+        div
+            h1.logo-name IN+
+        h3 Welcome to IN+
+        p
+            | Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.
+        p Login in. To see it in action.
+
+        +app-form(formName, 'submit')
+            alert( type ="danger", [dismissible]="true", *ngIf='error')
+                | {{ error }}
+            - name = 'username'
+            - control = parseControl([formName, name])
+            +app-form-input-group(control, name)(placeholder='Username')
+            - name = 'password'
+            - control = parseControl([formName, name])
+            +app-form-input-group(control, name, null, 'password')(placeholder='Password')
+            button.btn.btn-primary.block.full-width.m-b(type='submit', [disabled]= "!" + formName + ".valid") Login
+        p.m-t
+            small Inspinia we app framework base on Bootstrap 3 © 2014

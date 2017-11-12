@@ -1,0 +1,41 @@
+
+<form [formGroup]="formService.form" novalidate="" (ngSubmit)="formService.submit($event)">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ formService.result?._id ? 'Edit order - notes: '+ formService.result._id : ''}}
+    </h4>
+    <button class="close pull-right" type="button" aria-label="Close" (click)="modalRef.hide()"><span aria-hidden="true">×</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-12">
+        <app-form-messages></app-form-messages>
+      </div>
+      <div class="col-xs-12">
+        <div class="row">
+          <div class="col-xs-12">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('customer').touched && formService.form.get('customer').errors}">
+              <label>Customer notes
+              </label>
+              <input class="form-control" type="text" formControlName="customer">
+              <div *ngIf="formService.form.get('customer').touched && formService.form.get('customer').errors">
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('staff').touched && formService.form.get('staff').errors}">
+              <label>Staff notes
+              </label>
+              <input class="form-control" type="text" formControlName="staff">
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="submit" [disabled]="!formService.form.valid" (submit)="submit($event)">Save</button>
+    <button class="btn btn-secondary" type="button" (click)="modalRef.hide()">Close</button>
+  </div>
+</form>

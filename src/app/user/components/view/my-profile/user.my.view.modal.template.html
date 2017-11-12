@@ -1,0 +1,88 @@
+
+<div class="modal-header">
+  <h4 class="modal-title pull-left">View My profile
+  </h4>
+  <button class="close pull-right" type="button" aria-label="Close" (click)="modalRef.hide()"><span aria-hidden="true">×</span></button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <app-form-messages></app-form-messages>
+    </div>
+    <div class="col-xs-12">
+      <div class="row" *ngIf="model">
+        <div class="col-xs-3">
+          <div class="ibox">
+            <div class="ibox-content">
+              <div class="center-block clearfix">
+                <carousel [interval]="5000" [noWrap]="false" *ngIf="files?.length">
+                  <slide template="ngFor let image of files"><img class="col-xs-12 img-responsive" [src]="image.url" style="margin:auto;"></slide>
+                </carousel><img src="http://placehold.it/250X250?text=Upload+image" *ngIf="!(files?.length)">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-9">
+          <div class="ibox">
+            <div class="ibox-content">
+              <div class="row">
+                <div class="col-xs-6">
+                  <ul class="list-group clear-list m-t">
+                    <li class="list-group-item first-item"><span class="pull-right">{{ model.username}}</span><span class="font-bold">Username</span></li>
+                    <li class="list-group-item"><span class="pull-right">{{ model.firstName}}</span><span class="font-bold">First name</span></li>
+                    <li class="list-group-item"><span class="pull-right">{{ model.middleName}}</span><span class="font-bold">Middle name</span></li>
+                    <li class="list-group-item"><span class="pull-right">{{ model.lastName}}</span><span class="font-bold">Last name</span></li>
+                    <li class="list-group-item"><span class="pull-right">{{ model.gender| titlecase}}</span><span class="font-bold">Gender</span></li>
+                    <li class="list-group-item"><span class="pull-right"><span class="label label-success" *ngIf="model.isActive">Active</span><span class="label label-danger" *ngIf="!model.isActive">In Active</span></span><span class="font-bold">Status</span></li>
+                    <li class="list-group-item"><span class="pull-right">{{ model.createdAt | date:'medium' }}</span><span class="font-bold">Created At</span></li>
+                  </ul>
+                </div>
+                <div class="col-xs-6">
+                  <ul class="list-group clear-list m-t">
+                    <li class="list-group-item first-item"><span class="pull-right">{{ model.email}}</span><span class="font-bold">Email</span></li>
+                    <li class="list-group-item"><span class="pull-right">{{ model.contactNumber}}</span><span class="font-bold">Contact Number</span></li>
+                    <li class="list-group-item"><span class="pull-right">{{ model.dob | date:'longDate'}}</span><span class="font-bold">Dob</span></li>
+                    <li class="list-group-item"><span class="pull-right">{{ model.mart.join(', ')}}</span><span class="font-bold">Marts</span></li>
+                    <li class="list-group-item"><span class="pull-right">{{ model.userGroup}}</span><span class="font-bold">User Group</span></li>
+                    <li class="list-group-item"><span class="pull-right"><span class="label label-danger" *ngIf="model.isLocked">Yes</span><span class="label label-success" *ngIf="!model.isLocked">No</span></span><span class="font-bold">Is Locked?</span></li>
+                    <li class="list-group-item"><span class="pull-right">{{ model.updatedAt | date:'medium' }}</span><span class="font-bold">Updated At</span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="model">
+        <div class="col-xs-12">
+          <div class="ibox">
+            <div class="ibox-title">
+              <h5>Address</h5>
+            </div>
+            <div class="ibox-content">
+              <div class="row">
+                <div class="col-xs-6">
+                  <ul class="list-group clear-list">
+                    <li class="list-group-item first-item"><span class="pull-right">{{ model.address.addressLine1}}</span><span class="font-bold">Address Line 1</span></li>
+                    <li class="list-group-item"><span class="pull-right">{{ model.address.addressLine2}}</span><span class="font-bold">Address Line 2</span></li>
+                    <li class="list-group-item"><span class="pull-right">{{ model.address.town}}</span><span class="font-bold">Town/City</span></li>
+                  </ul>
+                </div>
+                <div class="col-xs-6">
+                  <ul class="list-group clear-list">
+                    <li class="list-group-item first-item"><span class="pull-right">{{ model.address.county}}</span><span class="font-bold">County</span></li>
+                    <li class="list-group-item"><span class="pull-right">{{ model.address.country}}</span><span class="font-bold">Country</span></li>
+                    <li class="list-group-item"><span class="pull-right">{{ model.address.postcode}}</span><span class="font-bold">Postcode</span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-secondary" type="button" (click)="modalRef.hide()">Close</button>
+</div>

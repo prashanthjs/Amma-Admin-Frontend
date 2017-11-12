@@ -1,0 +1,20 @@
+table.table.table-striped.table-bordered
+    thead
+        tr
+            th #
+            th Name
+            th created
+            th
+    tbody
+        template(ngFor let-item [ngForOf] = "recentUsers"  let-i = "index")
+            tr
+                td {{item.username}}
+                td {{item.firstName}} {{item.middleName}} {{item.lastName}}
+                td {{item.createdAt | date:'medium' }}
+                td
+                    a.btn.btn-primary.btn-sm([routerLink]="['/user/list', item._id]")
+                        i.glyphicon.glyphicon-eye-open
+
+        tr(*ngIf != "!(recentUsers && recentUsers.length)")
+            td(colspan=5)
+                p No Recent Users

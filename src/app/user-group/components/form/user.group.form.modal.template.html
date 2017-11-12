@@ -1,0 +1,69 @@
+
+<form [formGroup]="formService.form" novalidate="" (ngSubmit)="formService.submit($event)">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ formService.result?.name ? 'Edit user group: '+ formService.result.name : 'Create user group'}}
+    </h4>
+    <button class="close pull-right" type="button" aria-label="Close" (click)="modalRef.hide()"><span aria-hidden="true">×</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-12">
+        <app-form-messages></app-form-messages>
+      </div>
+      <div class="col-xs-12">
+        <div class="row">
+          <div class="col-xs-12">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('title').touched && formService.form.get('title').errors}">
+              <label>Title
+              </label>
+              <input class="form-control" type="text" formControlName="title">
+            </fieldset>
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('isActive').touched && formService.form.get('isActive').errors}">
+              <label> Is Active?</label>
+              <div class="col-xs-12">
+                <label class="radio-inline">
+                  <input type="radio" [value]="true" formControlName="isActive" [checked]="formService.form.get('isActive').value === true"> Yes
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" [value]="false" formControlName="isActive" [checked]="formService.form.get('isActive').value === false"> No
+                </label>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <div class="row" *ngIf="privileges">
+          <div class="col-xs-12">
+            <div class="clearfix">
+              <div class="title pull-left">
+                <h5>Privileges</h5>
+              </div>
+              <div class="toolbar pull-right"><a class="m-r-xs" href="javascript:void(0);" (click)="selectAll()">Select All</a>/<a class="m-l-xs" href="javascript:void(0);" (click)="unselectedAll()">Unselect All</a></div>
+            </div>
+            <hr>
+          </div>
+          <div class="col-xs-12">
+            <div class="row" template="ngFor let group of privilegeGroups">
+              <div class="col-xs-12">
+                <h4>{{group}}</h4>
+                <hr>
+              </div>
+              <div class="col-xs-12 m-b-sm">
+                <div class="row">
+                  <div class="col-xs-4" template="ngFor let privilege of privileges[group]; let i = index">
+                    <label>
+                      <input type="checkbox" value="{{privilege._id}}" name="roles_{{privilege._id}}" [checked]="formService.form.get('privileges').value &amp;&amp; formService.form.get('privileges').value.indexOf(privilege._id)&gt;=0" (change)="privilegeChanged(privilege._id, $event)"><span class="m-l-xs">{{privilege.title}}</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="submit" [disabled]="!formService.form.valid" (submit)="submit($event)">Save</button>
+    <button class="btn btn-secondary" type="button" (click)="modalRef.hide()">Close</button>
+  </div>
+</form>

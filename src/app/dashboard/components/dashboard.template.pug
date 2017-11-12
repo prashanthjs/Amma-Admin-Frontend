@@ -1,0 +1,189 @@
+include  ../../layouts/view-helpers/common
+
++app-page-content()
+    .row.clearfix
+        .col-md-4.pull-right
+            .input-group.m-b-md(daterangepicker='', (selected)='selectedDate($event)')
+                span.form-control.uneditable-input(name='daterange')
+                    | {{ date.start | date:'medium' }} - {{ date.end| date:'medium' }}
+                span.input-group-btn
+                    a.btn.btn-default(type='button')
+                        i.glyphicon.glyphicon-calendar
+
+    .row
+        .col-md-3
+            .ibox.float-e-margins
+                .ibox-title
+                    h5 Sales
+                .ibox-content
+                    .row
+                        .col-md-6
+                            h1.no-margins {{sales.total | currency: configService.currencyCode:true:'.0' }}
+                        .col-md-6
+                            h1.no-margins {{sales.profit | currency: configService.currencyCode:true:'.0'}}
+                            .font-bold.text-navy
+                                small Profit
+
+
+        .col-md-3
+            .ibox.float-e-margins
+                .ibox-title
+                    h5 Orders
+                .ibox-content
+                    .row
+                        .col-md-6
+                            h1.no-margins {{ orders.total}}
+                        .col-md-6
+                            h1.no-margins {{ orders.completed }}
+                            .font-bold.text-navy
+                                small Completed
+        .col-md-3
+            .ibox.float-e-margins
+                .ibox-title
+                    h5 Users
+                .ibox-content
+                    .row
+                        .col-md-6
+                            h1.no-margins {{users.total}}
+                        .col-md-6
+                            h1.no-margins {{users.active}}
+                            .font-bold.text-navy
+                                small Active
+
+        .col-md-3
+            .ibox.float-e-margins
+                .ibox-title
+                    h5 Products
+                .ibox-content
+                    .row
+                        .col-md-4
+                            h1.no-margins {{ products.total}}
+                        .col-md-4
+                            h1.no-margins {{ products.active }}
+                            .font-bold.text-navy
+                                small Active
+                        .col-md-4
+                            h1.no-margins {{ products.outOfStock }}
+                            .font-bold.text-danger
+                                small Out of stock
+
+    .row
+        .col-md-4
+            .ibox.float-e-margins
+                .ibox-title
+                    h5 Orders
+                .ibox-content(*ngIf != 'orderDaySummary.label?.length')
+                    canvas(baseChart,
+                    [colors]="orderDaySummary.colors",
+                    [options]='orderDaySummary.options',
+                    [datasets]='orderDaySummary.data',
+                    [labels]='orderDaySummary.label',
+                    [legend]="'false'",
+                    [chartType]="'line'")
+                .ibox-content(*ngIf != '!orderDaySummary.label?.length')
+                    p.text-center No data to display
+
+        .col-md-4
+            .ibox.float-e-margins
+                .ibox-title
+                    h5 Sales
+                .ibox-content(*ngIf != 'salesDaySummary.label?.length')
+                    canvas(baseChart,
+                    [colors]="salesDaySummary.colors",
+                    [options]='salesDaySummary.options',
+                    [datasets]='salesDaySummary.data',
+                    [labels]='salesDaySummary.label',
+                    [legend]="'false'",
+                    [chartType]="'line'")
+                .ibox-content(*ngIf != '!salesDaySummary.label?.length')
+                    p.text-center No data to display
+
+        .col-md-4
+            .ibox.float-e-margins
+                .ibox-title
+                    h5 Registered users
+                .ibox-content(*ngIf != 'userDaySummary.label?.length')
+                    canvas(baseChart,
+                    [colors]="userDaySummary.colors",
+                    [options]='userDaySummary.options',
+                    [datasets]='userDaySummary.data',
+                    [labels]='userDaySummary.label',
+                    [legend]="'false'",
+                    [chartType]="'line'")
+                .ibox-content(*ngIf != '!userDaySummary.label?.length')
+                    p.text-center No data to display
+
+
+
+    .row
+        .col-md-6
+            .ibox.float-e-margins
+                .ibox-title
+                    h5 Recent Orders
+                .ibox-content
+                    include helper/recent-orders-table
+
+        .col-md-6
+            .ibox.float-e-margins
+                .ibox-title
+                    h5 Sales summary - annually
+                .ibox-content(*ngIf != 'salesStatusChart.label?.length')
+                    canvas(baseChart,
+                    height="160",
+                    [data]='salesStatusChart.data',
+                    [labels]='salesStatusChart.label',
+                    [options]='salesStatusChart.options',
+                    [legend]="'true'",
+                    [chartType]="'pie'")
+                .ibox-content(*ngIf != '!salesStatusChart.label?.length')
+                    p.text-center No data to display
+
+
+
+    .row
+        .col-md-6
+            .ibox.float-e-margins
+                .ibox-title
+                    h5 Popular products
+                .ibox-content(*ngIf != 'productChart.label?.length')
+                    canvas(baseChart,
+                    height="180",
+                    [colors]='productChart.colors',
+                    [datasets]='productChart.data',
+                    [labels]='productChart.label',
+                    [options]='productChart.options', [legend]="'true'",
+                    [chartType]="'bar'")
+
+                .ibox-content(*ngIf != '!productChart.label?.length')
+                    p.text-center No data to display
+
+        .col-md-6
+            .ibox.float-e-margins
+                .ibox-title
+                    h5 Products - out of stock
+                .ibox-content
+                    include helper/products-outofstock-table
+
+
+    .row
+        .col-md-6
+            .ibox.float-e-margins
+                .ibox-title
+                    h5 Recent Users
+                .ibox-content
+                    include helper/recent-users-table
+
+        .col-md-6
+            .ibox.float-e-margins
+                .ibox-title
+                    h5 Popular users
+                .ibox-content(*ngIf != 'userChart.label?.length')
+                    canvas(baseChart,
+                    height="180",
+                    [colors]='userChart.colors',
+                    [datasets]='userChart.data',
+                    [labels]='userChart.label',
+                    [options]='userChart.options', [legend]="'true'",
+                    [chartType]="'bar'")
+                .ibox-content(*ngIf != '!userChart.label?.length')
+                    p.text-center No data to display

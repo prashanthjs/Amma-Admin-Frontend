@@ -1,0 +1,66 @@
+
+<div class="row border-bottom white-bg">
+  <nav class="navbar navbar-static-top" role="navigation">
+    <div class="navbar-header">
+      <button class="navbar-toggle collapsed" aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" type="button"><i class="fa fa-reorder"></i></button><a class="navbar-brand" [routerLink]="['/']">Amma Admin</a>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar" *ngIf="authService.user">
+      <ul class="nav navbar-nav">
+        <li [ngClass]="{active: activeRoute('mart/list')}" *appHasPrivilege="['view-mart-basic-privilege']"><a aria-expanded="false" role="button" [routerLink]="['/mart/list']">Marts</a></li>
+        <li dropdown [ngClass]="{active: activeRoute('product') || activeRoute('category') }" *appHasPrivilege="['view-product-basic-privilege', 'view-category-basic-privilege']"><a aria-expanded="false" role="button" dropdownToggle>Products<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" *dropdownMenu>
+            <li [ngClass]="{active: activeRoute('product/list')}" *appHasPrivilege="['view-product-basic-privilege']"><a [routerLink]="['/product/list']">Products</a></li>
+            <li [ngClass]="{active: activeRoute('category/list')}" *appHasPrivilege="['view-category-basic-privilege']"><a [routerLink]="['/category/list']">Categories</a></li>
+          </ul>
+        </li>
+        <li dropdown [ngClass]="{active: activeRoute('user')}" *appHasPrivilege="['view-user-basic-privilege', 'view-user-group-basic-privilege']"><a aria-expanded="false" role="button" dropdownToggle>User<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" *dropdownMenu>
+            <li [ngClass]="{active: activeRoute('user/list')}" *appHasPrivilege="['view-user-basic-privilege']"><a [routerLink]="['/user/list']">Users</a></li>
+            <li [ngClass]="{active: activeRoute('user/group/list')}" *appHasPrivilege="['view-user-group-basic-privilege']"><a [routerLink]="['/user/group/list']">Groups</a></li>
+          </ul>
+        </li>
+        <li dropdown [ngClass]="{active: activeRoute('payment')}" *appHasPrivilege="['view-payment-method-basic-privilege', 'view-payment-status-basic-privilege']"><a aria-expanded="false" role="button" dropdownToggle>Payments<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" *dropdownMenu>
+            <li [ngClass]="{active: activeRoute('payment/method/list')}" *appHasPrivilege="['view-payment-method-basic-privilege']"><a [routerLink]="['/payment/method/list']">Methods</a></li>
+            <li [ngClass]="{active: activeRoute('payment/status/list')}" *appHasPrivilege="['view-payment-status-basic-privilege']"><a [routerLink]="['/payment/status/list']">Statuses</a></li>
+          </ul>
+        </li>
+        <li dropdown [ngClass]="{active: activeRoute('shipping')}" *appHasPrivilege="['view-shipping-method-basic-privilege', 'view-shipping-status-basic-privilege']"><a aria-expanded="false" role="button" dropdownToggle>Shipping<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" *dropdownMenu>
+            <li [ngClass]="{active: activeRoute('shipping/method/list')}" *appHasPrivilege="['view-shipping-method-basic-privilege']"><a [routerLink]="['/shipping/method/list']">Methods</a></li>
+            <li [ngClass]="{active: activeRoute('shipping/status/list')}" *appHasPrivilege="['view-shipping-status-basic-privilege']"><a [routerLink]="['/shipping/status/list']">Statuses</a></li>
+          </ul>
+        </li>
+        <li dropdown [ngClass]="{active: activeRoute('order')}" *appHasPrivilege="['view-order-basic-privilege', 'view-order-status-basic-privilege']"><a aria-expanded="false" role="button" dropdownToggle>Orders<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" *dropdownMenu>
+            <li [ngClass]="{active: activeRoute('order/list')}" *appHasPrivilege="['view-order-basic-privilege']"><a [routerLink]="['/order/list']">Orders</a></li>
+            <li [ngClass]="{active: activeRoute('order/status/list')}" *appHasPrivilege="['view-order-status-basic-privilege']"><a [routerLink]="['/order/status/list']">Statuses</a></li>
+          </ul>
+        </li>
+        <li dropdown [ngClass]="{active: activeRoute('report')}" *appHasPrivilege="['view-report-order-top-products-amount-privilege', 'view-report-order-top-products-count-privilege', 'view-report-order-top-users-amount-privilege', 'view-report-order-top-users-count-privilege', 'view-report-order-status-summary-privilege', 'view-report-order-day-summary-privilege', 'view-report-user-day-summary-privilege']"><a aria-expanded="false" role="button" dropdownToggle>Reports<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" *dropdownMenu>
+            <li [ngClass]="{active: activeRoute('report/top-products')}" *appHasPrivilege="['view-report-order-top-products-amount-privilege', 'view-report-order-top-products-count-privilege']"><a [routerLink]="['/report/top-products']">Top products</a></li>
+            <li [ngClass]="{active: activeRoute('report/top-users')}" *appHasPrivilege="['view-report-order-top-users-amount-privilege', 'view-report-order-top-users-count-privilege']"><a [routerLink]="['/report/top-users']">Top users</a></li>
+            <li [ngClass]="{active: activeRoute('report/sales/status')}" *appHasPrivilege="['view-report-order-status-summary-privilege']"><a [routerLink]="['/report/sales/status']">Status</a></li>
+            <li [ngClass]="{active: activeRoute('report/sales/summary/day')}" *appHasPrivilege="['view-report-order-day-summary-privilege']"><a [routerLink]="['/report/sales/summary/day']">Sales summary</a></li>
+            <li [ngClass]="{active: activeRoute('report/user/summary/day')}" *appHasPrivilege="['view-report-user-day-summary-privilege']"><a [routerLink]="['/report/user/summary/day']">User summary</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-top-links navbar-right">
+        <li dropdown *ngIf="authService.user"><a aria-expanded="false" role="button" dropdownToggle><span><img class="img-rounded pull-left m-r-xs" *ngIf="profilePic" alt="image" [src]="profilePic" height="30"><strong class="font-bold">{{authService.user.firstName}} {{authService.user.lastName}}</strong></span><span class="caret"></span></a>
+          <ul class="animated fadeInRight dropdown-menu" *dropdownMenu>
+            <li *appHasPrivilege="['update-user-my-profile-privilege']"><a href="javascript:void(0);" (click)="editProfile()">Edit Profile</a></li>
+            <li *appHasPrivilege="['update-user-my-password-privilege']"><a href="javascript:void(0);" (click)="changePassword()">Change my password</a></li>
+            <li *appHasPrivilege="['view-user-my-profile-privilege']"><a href="javascript:void(0);" (click)="viewProfile()">View profile</a></li>
+            <li class="divider"></li>
+            <li><a [routerLink]="['/logout']">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+      <div class="pull-right m-t-sm" *ngIf="authService.user && mart.options?.length">
+        <ss-multiselect-dropdown [options]="mart.options" [(ngModel)]="mart.model" (ngModelChange)="onChange($event)"></ss-multiselect-dropdown>
+      </div>
+    </div>
+  </nav>
+</div>

@@ -1,0 +1,50 @@
+- formArrayName = 'totalPrice'
+.row
+    .col-xs-12
+        div.clearfix.m-b-xs
+            h5.pull-left Cost dependencies
+            button.btn.btn-primary.btn-sm.pull-right((click)="addFormElement('totalPrice')")
+                i.glyphicon.glyphicon-plus
+
+        table.table.table-striped.table-bordered(formArrayName='totalPrice')
+            thead
+                tr
+                    th #
+                    th Min
+                    th Amount
+                    th Type
+                    th
+            tbody
+                template( ngFor let-priceItem [ngForOf]="formService.form.get('shippingCharge').get('totalPrice').controls" let-i="index")
+                    tr([formGroupName]="i" )
+                        td {{i+1}}
+                        td
+                            - name = 'min'
+                            - control = "formService.form.get('shippingCharge').get('totalPrice').controls[i].get('min')"
+                            +app-form-input-group(control, name)
+                        td
+                            - name = 'amount'
+                            - control = "formService.form.get('shippingCharge').get('totalPrice').controls[i].get('amount')"
+                            +app-form-group(control)
+                                .input-group
+                                    span.input-group-addon {{ configService.currencySymbol }}
+                                    input.form-control(type="number", formControlName=name)
+                                +app-form-errors(control)
+                                    +app-form-error(control, 'number')
+                                        | Please enter number
+
+                        td
+                            - name = 'type';
+                            - control = "formService.form.get('shippingCharge').get('totalPrice').controls[i].get('type')"
+                            +app-form-group(control)
+                                select.form-control(formControlName=name)
+                                    option(value="percentage") Percentage
+                                    option(value="absolute") Absolute
+
+                        td
+                            a.btn.btn-danger.btn-sm.m-l-xs(href='javascript:void(0);',mwlConfirmationPopover,title= "Delete Item", [message] = "'Do you want to remove?'",  (confirm)="removeFormElement('totalPrice',i)", placement='left')
+                                i.glyphicon.glyphicon-remove
+
+                tr(*ngIf="!formService.form.get('shippingCharge').get('totalPrice').controls.length")
+                    td(colspan="5")
+                        | No Cost dependencies

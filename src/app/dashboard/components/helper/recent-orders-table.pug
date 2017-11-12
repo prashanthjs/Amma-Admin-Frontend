@@ -1,0 +1,22 @@
+table.table.table-striped.table-bordered
+    thead
+        tr
+            th #
+            th Order Id
+            th status
+            th created
+            th
+    tbody
+        template(ngFor let-item [ngForOf] = "recentOrders"  let-i = "index")
+            tr
+                td {{i+1}}
+                td {{item._id}}
+                td {{item.orderStatus}}
+                td {{item.createdAt | date:'medium' }}
+                td
+                    a.btn.btn-primary.btn-sm([routerLink]="['/user/list', item._id]")
+                        i.glyphicon.glyphicon-eye-open
+
+        tr(*ngIf != "!recentOrders || !recentOrders.length")
+            td(colspan=5)
+                p No Recent orders

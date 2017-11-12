@@ -1,0 +1,210 @@
+include ../../../layouts/view-helpers/common
+
+- formName = 'formService.form';
+- modalName = 'modalRef';
+- formSubmit = 'formService.submit'
+
++app-modal
+  +app-form(formName, formSubmit)
+    +app-modal-header(modalName)
+      | {{ formService.result?.name ? 'Edit product: '+ formService.result.name : 'Create product'}}
+    +app-modal-body
+      .row
+        .col-xs-4
+          +app-modal-image-upload('productFileUpload')
+            app-file-input(#productFileUpload, formControlName='imgToken', type='product')
+        .col-xs-8
+          .row
+            .col-xs-6
+              - name = 'title'
+              - control = parseControl([formName, name])
+              - label = 'Title'
+              +app-form-input-group(control, name, label)
+
+            .col-xs-6
+              - name = 'sku'
+              - control = parseControl([formName, name])
+              - label = 'SKU'
+              +app-form-input-group(control, name, label)
+
+          - groupName = 'price'
+          .row(formGroupName=groupName)
+            .col-xs-4
+              - name = 'sell'
+              - control = parseControl([formName, groupName, name])
+              +app-form-group(control)
+                label Sell Price
+                .input-group
+                  span.input-group-addon {{ configService.currencySymbol }}
+                  input.form-control(type="number", formControlName=name)
+                +app-form-errors(control)
+                  +app-form-error(control, 'number')
+                    | Please enter number
+            .col-xs-4
+              - name = 'cost'
+              - control = parseControl([formName, groupName, name])
+              +app-form-group(control)
+                label Cost Price
+                .input-group
+                  span.input-group-addon {{ configService.currencySymbol }}
+                  input.form-control(type="number", formControlName=name)
+                +app-form-errors(control)
+                  +app-form-error(control, 'number')
+                    | Please enter number
+
+            .col-xs-4
+              - name = 'list'
+              - control = parseControl([formName, groupName, name])
+              +app-form-group(control)
+                label List Price
+                .input-group
+                  span.input-group-addon {{ configService.currencySymbol }}
+                  input.form-control(type="number", formControlName=name)
+                +app-form-errors(control)
+                  +app-form-error(control, 'number')
+                    | Please enter number
+          .row
+            .col-xs-6
+              - name = 'categories'
+              - control = parseControl([formName, name])
+              +app-form-group(control)
+                label  Categories
+                app-search-select-input( formControlName=name, [maxItems]="10", [searchFunc] = 'searchCategories')
+                +app-form-errors(control)
+                  +app-form-error(control, 'required')
+                    | Please select categories
+            .col-xs-6
+              - name = 'isActive';
+              - control = parseControl([formName, name])
+              +app-form-group(control)
+                label  Is Active?
+                div.col-xs-12
+                  label.radio-inline
+                    input(type='radio', [value]='true', formControlName=name, [checked]= control + ".value === true")
+                    |  Yes
+                  label.radio-inline
+                    input(type='radio', [value]='false',formControlName=name, [checked]= control + ".value === false")
+                    |  No
+
+          .row
+            .col-xs-12
+              - name = 'tags'
+              - control = parseControl([formName, name])
+              +app-form-group(control)
+                label Tags
+                tag-input(formControlName=name, [modelAsStrings] = "true")
+
+      .row
+        - groupName = 'inventory'
+        .row(formGroupName=groupName)
+          .col-xs-12
+            h4 Inventory
+            hr
+            .row
+              .col-xs-6
+                - name = 'stock'
+                - control = parseControl([formName, groupName, name])
+                - label = 'Stock'
+                +app-form-input-group(control, name, label, 'number')
+                  +app-form-errors(control)
+                    +app-form-error(control, 'number')
+                      | Please enter number
+
+            - groupName1 = 'quantity';
+            .row(formGroupName=groupName1)
+              .col-xs-4
+                - name = 'min'
+                - control = parseControl([formName, groupName, groupName1, name])
+                - label = 'Minimum quantity'
+                +app-form-input-group(control, name, label, 'number')
+                  +app-form-errors(control)
+                    +app-form-error(control, 'number')
+                      | Please enter number
+              .col-xs-4
+                - name = 'max'
+                - control = parseControl([formName, groupName, groupName1, name])
+                - label = 'Maximum quantity'
+                +app-form-input-group(control, name, label, 'number')
+                  +app-form-errors(control)
+                    +app-form-error(control, 'number')
+                      | Please enter number
+              .col-xs-4
+                - name = 'step'
+                - control = parseControl([formName, groupName, groupName1, name])
+                - label = 'Quantity step'
+                +app-form-input-group(control, name, label, 'number')
+                  +app-form-errors(control)
+                    +app-form-error(control, 'number')
+                      | Please enter number
+      .row
+        - groupName = 'shipping';
+        .col-xs-12(formGroupName = groupName)
+          h4 Shipping
+          hr
+          .row
+            .col-xs-12
+              .row
+                .col-xs-6
+                  - name = 'weight'
+                  - control = parseControl([formName, groupName, name])
+                  +app-form-group(control)
+                    label Weight
+                    .input-group
+                      input.form-control(type="number", formControlName=name)
+                      span.input-group-addon {{configService.weightSymbol}}
+                    +app-form-errors(control)
+                      +app-form-error(control, 'number')
+                        | Please enter number
+
+              - groupName1 = 'box';
+              .row(formGroupName=groupName1)
+                .col-xs-4
+                  - name = 'length'
+                  - control = parseControl([formName, groupName, groupName1, name])
+                  +app-form-group(control)
+                    label Length
+                    .input-group
+                      input.form-control(type="number", formControlName=name)
+                      span.input-group-addon {{configService.lengthSymbol}}
+                    +app-form-errors(control)
+                      +app-form-error(control, 'number')
+                        | Please enter number
+                .col-xs-4
+                  - name = 'width'
+                  - control = parseControl([formName, groupName, groupName1, name])
+                  +app-form-group(control)
+                    label Width
+                    .input-group
+                      input.form-control(type="number", formControlName=name)
+                      span.input-group-addon {{configService.lengthSymbol}}
+                    +app-form-errors(control)
+                      +app-form-error(control, 'number')
+                        | Please enter number
+                .col-xs-4
+                  - name = 'height'
+                  - control = parseControl([formName, groupName, groupName1, name])
+                  +app-form-group(control)
+                    label Height
+                    .input-group
+                      input.form-control(type="number", formControlName=name)
+                      span.input-group-addon {{configService.lengthSymbol}}
+                    +app-form-errors(control)
+                      +app-form-error(control, 'number')
+                        | Please enter number
+      .row
+        .col-xs-12
+          h4 Description
+          hr
+          - name = 'shortDescription'
+          - control = parseControl([formName, name])
+          +app-form-group(control)
+            label Short Description
+            textarea.form-control(formControlName=name)
+
+          - name = 'description'
+          - control = parseControl([formName, name])
+          +app-form-group(control)
+            label Short Description
+            textarea.form-control(formControlName=name)
+
+    +app-modal-footer(formName, modalName)

@@ -1,0 +1,149 @@
+include ../../../layouts/view-helpers/common
+
+- formName = 'formService.form';
+- modalName = 'modalRef';
+- formSubmit = 'formService.submit'
+
++app-modal
+  +app-form(formName, formSubmit)
+    +app-modal-header(modalName)
+      | {{ formService.result?.username ? 'Edit user: '+ formService.result.username : 'Create user'}}
+    +app-modal-body
+      .row
+        .col-xs-4
+          +app-modal-image-upload('userFileUpload')
+            app-file-input(#userFileUpload, formControlName='imgToken', type='user')
+        .col-xs-8
+          .row
+            .col-xs-4
+              - name = 'firstName'
+              - control = parseControl([formName, name])
+              - label = 'First name'
+              +app-form-input-group(control, name, label)
+
+            .col-xs-4
+              - name = 'middleName'
+              - control = parseControl([formName, name])
+              - label = 'Middle name'
+              +app-form-input-group(control, name, label)
+
+            .col-xs-4
+              - name = 'lastName'
+              - control = parseControl([formName, name])
+              - label = 'Last name'
+              +app-form-input-group(control, name, label)
+
+          .row(*ngIf = '!formService.result?._id')
+            .col-xs-6
+              - name = 'password'
+              - control = parseControl([formName, name])
+              - label = 'Password'
+              +app-form-input-group(control, name, label, 'password')
+
+            .col-xs-6
+              - name = 'rePassword';
+              - control = parseControl([formName, name])
+              - label = 'Re-enter Password'
+              +app-form-input-group(control, name, label, 'password')
+                +app-form-errors(control)
+                  +app-form-error(control, 'equalTo')
+                    | Password do not match
+          .row
+            .col-xs-6
+              - name = 'email'
+              - control = parseControl([formName, name])
+              - label = 'Email'
+              +app-form-input-group(control, name, label, 'email')
+                +app-form-errors(control)
+                  +app-form-error(control, 'email')
+                    | Invalid email
+            .col-xs-6
+              - name = 'contactNumber'
+              - control = parseControl([formName, name])
+              - label = 'Contact number'
+              +app-form-input-group(control, name, label)
+                +app-form-errors(control)
+                  +app-form-error(control, 'required')
+                    | Please enter contact number
+
+          .row
+            .col-xs-6
+              - name = 'dob'
+              - control = parseControl([formName, name])
+              +app-form-group(control)
+                label Dob
+                kendo-datepicker.form-control(formControlName=name, [format]="'dd/MM/y'")
+
+            .col-xs-6
+              - name = 'gender';
+              - control = parseControl([formName, name])
+              +app-form-group(control)
+                label  Gender?
+                div.col-xs-12
+                  label.radio-inline
+                    input(type='radio', value='male', formControlName=name, [checked]= control + ".value === 'male'")
+                    |  Male
+                  label.radio-inline
+                    input(type='radio', value='female',formControlName=name, [checked]= control + ".value === 'female'")
+                    |  Female
+                  label.radio-inline
+                    input(type='radio', value='other',formControlName=name, [checked]= control + ".value === 'other'")
+                    |  Other
+          .row
+            .col-xs-6
+              - name = 'isActive';
+              - control = parseControl([formName, name])
+              +app-form-group(control)
+                label  Is Active?
+                div.col-xs-12
+                  label.radio-inline
+                    input(type='radio', [value]='true', formControlName=name, [checked]= control + ".value === true")
+                    |  Yes
+                  label.radio-inline
+                    input(type='radio', [value]='false',formControlName=name, [checked]= control + ".value === false")
+                    |  No
+      .row
+        - groupName = 'address'
+        .col-xs-12(formGroupName = groupName)
+          h3 Address
+          hr
+          .row
+            .col-xs-6
+              - name = 'addressLine1'
+              - control = parseControl([formName, groupName, name])
+              - label = 'Address Line1'
+              +app-form-input-group(control, name, label)
+
+            .col-xs-6
+              - name = 'addressLine2'
+              - control = parseControl([formName, groupName, name])
+              - label = 'Address Line2'
+              +app-form-input-group(control, name, label)
+
+          .row
+            .col-xs-6
+              - name = 'town'
+              - control = parseControl([formName, groupName, name])
+              - label = 'Town/City'
+              +app-form-input-group(control, name, label)
+
+            .col-xs-6
+              - name = 'county'
+              - control = parseControl([formName, groupName, name])
+              - label = 'County'
+              +app-form-input-group(control, name, label)
+
+          .row
+            .col-xs-6
+              - name = 'country'
+              - control = parseControl([formName, groupName, name])
+              - label = 'Country'
+              +app-form-input-group(control, name, label)
+
+            .col-xs-6
+              - name = 'postcode'
+              - control = parseControl([formName, groupName, name])
+              - label = 'Postcode'
+              +app-form-input-group(control, name, label)
+
+    +app-modal-footer(formName, modalName)

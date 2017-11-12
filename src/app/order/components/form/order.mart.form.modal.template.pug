@@ -1,0 +1,23 @@
+include ../../../layouts/view-helpers/common
+
+- formName = 'formService.form';
+- modalName = 'modalRef';
+- formSubmit = 'formService.submit'
+
++app-modal(modalName)
+    +app-form-mart(formName, formSubmit)
+        +app-modal-header(modalName)
+            div(*ngIf ='formService.result') Edit order: {{formService.result?.name }}
+        +app-modal-body
+            .row
+                .col-xs-6
+                    - name = 'mart'
+                    - control = parseControl([formName,  name])
+                    +app-form-group(control)
+                        label  Marts
+                        app-search-select-input(formControlName=name, maxItems = 10, [searchFunc] = 'searchMart')
+                        +app-form-errors(control)
+                            +app-form-error(control, 'required')
+                                | Please select marts
+
+        +app-modal-footer(formName, modalName)

@@ -1,0 +1,27 @@
+table.table.table-striped.table-bordered
+  thead
+    tr
+      th #
+      th Name
+      th Tracking number
+      th status
+      th created
+      th(*appHasPrivilege="['update-order-basic-privilege']")
+  tbody
+    template(ngFor let-item [ngForOf] = "viewResource.model.shipping"  let-i = "index")
+      tr
+        td {{i+1}}
+        td {{item.name}}
+        td {{item.trackingNumber}}
+        td {{item.shippingStatus}}
+        td {{item.createdAt | date:'medium' }}
+        td(*appHasPrivilege="['update-order-basic-privilege']")
+          button.btn.btn-primary.btn-sm((click)='openShipping(i)', *appHasPrivilege="['update-order-basic-privilege']")
+            i.glyphicon.glyphicon-pencil
+          button.btn.btn-danger.btn-sm.m-l-xs(*appHasPrivilege="['update-order-basic-privilege']", mwlConfirmationPopover,title= "Delete Shipping", [message] = "'Do you want to remove?'",  (confirm)='removeShipping(i)', placement='left')
+            i.glyphicon.glyphicon-remove
+
+
+    tr(*ngIf = "!(viewResource.model.shipping?.length)")
+      td(colspan=7)
+        p No shipping details

@@ -1,0 +1,46 @@
+
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-sm-4">
+    <h2>Manage marts</h2>
+    <ol class="breadcrumb">
+      <li><a routerLink="/">Home</a></li>
+      <li class="active"><strong>Marts</strong></li>
+    </ol>
+  </div>
+  <div class="col-sm-8" *appHasPrivilege="['create-mart-basic-privilege']">
+    <div class="title-action">
+      <button class="btn btn-primary" (click)="open()">Create mart</button>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="wrapper wrapper-content">
+      <div class="animated fadeInRightBig">
+        <div class="ibox">
+          <div class="ibox-content">
+            <kendo-grid [data]="gridService.gridData" [pageSize]="gridService.state.take" [skip]="gridService.state.skip" [pageable]="true" [sortable]="{ allowUnsort: true, mode: 'multiple' }" [sort]="gridService.state.sort" [filter]="gridService.state.filter" [filterable]="true" (dataStateChange)="gridService.dataStateChange($event)">
+              <kendo-grid-column field="name" title="Mart name"></kendo-grid-column>
+              <kendo-grid-column field="title" title="Title"></kendo-grid-column>
+              <kendo-grid-column field="email" title="Email"></kendo-grid-column>
+              <kendo-grid-column field="contactNumber" title="Contact Number"></kendo-grid-column>
+              <kendo-grid-column field="isActive" title="Is Active?" width="120" filter="boolean">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                  <input type="checkbox" [checked]="dataItem.isActive" disabled="">
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-command-column>
+                <ng-template kendoGridCellTemplate let-dataItem>
+                  <button class="btn btn-primary" (click)="open(dataItem._id)" *appHasPrivilege="['update-mart-basic-privilege']"><i class="glyphicon glyphicon-pencil"></i></button><a class="btn btn-warning m-l-xs" [routerLink]="['/mart/list', dataItem._id]"><i class="glyphicon glyphicon-eye-open"></i></a>
+                  <ng-container *appHasPrivilege="['remove-mart-basic-privilege']">
+                    <button class="btn btn-danger m-l-xs" *ngIf="!dataItem.isLocked" mwlConfirmationPopover title="Delete Mart" [message]="'Do you want to remove ' + dataItem.name + '?'" (confirm)="remove(dataItem._id)" placement="left"><i class="glyphicon glyphicon-remove"></i></button>
+                  </ng-container>
+                </ng-template>
+              </kendo-grid-command-column>
+            </kendo-grid>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

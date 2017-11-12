@@ -1,0 +1,108 @@
+include ../../../layouts/view-helpers/common
++app-page-title-with-model-with-custom-actions
+  .col-sm-4
+    h2 {{viewResource.model.title}}
+    ol.breadcrumb
+      li
+        a(routerLink='/') Home
+      li.active
+        a(routerLink='/mart/list') Marts
+      li.active
+        strong {{viewResource.model.name}}
+
+  .col-sm-8
+    .title-action
+      button.btn.btn-primary((click)="open($event)", *appHasPrivilege="['update-mart-basic-privilege']")
+        i.glyphicon.glyphicon-pencil.m-r-xs
+        | Edit
+      ng-container(*appHasPrivilege="['remove-mart-basic-privilege']")
+        button.btn.btn-danger.m-l-xs(*ngIf='!viewResource.model.isLocked', mwlConfirmationPopover,title= "Delete mart", [message] = "'Do you want to remove ' + viewResource.model.name + '?'",  (confirm)='remove()', placement='left')
+          i.glyphicon.glyphicon-remove.m-r-xs
+          | Delete
+
++app-page-content-with-model
+  .row
+    .col-xs-3
+      .ibox
+        .ibox-content
+          .center-block.clearfix
+            carousel([interval]='5000', [noWrap]='false', *ngIf = 'viewResource.files && viewResource.files.length')
+              slide(template = 'ngFor let image of viewResource.files')
+                img.col-xs-12.img-responsive([src]='image.url', style='margin:auto;')
+            img(src= 'http://placehold.it/250X250?text=Upload+image', *ngIf = '!(viewResource.files && viewResource.files.length)')
+
+    .col-xs-9
+      .ibox
+        .ibox-content
+          .row
+            .col-xs-6
+              ul.list-group.clear-list
+                li.list-group-item.first-item
+                  span.pull-right {{ viewResource.model.name}}
+                  span.font-bold Mart name
+                li.list-group-item
+                  span.pull-right {{ viewResource.model.title}}
+                  span.font-bold Title
+                li.list-group-item
+                  span.pull-right {{ viewResource.model.website}}
+                  span.font-bold Website
+                li.list-group-item
+                  span.pull-right
+                    span.label.label-success(*ngIf='viewResource.model.isActive')
+                      | Active
+                    span.label.label-danger(*ngIf='!viewResource.model.isActive')
+                      | In Active
+                  span.font-bold Status
+                li.list-group-item
+                  span.pull-right {{ viewResource.model.createdAt | date:'medium' }}
+                  span.font-bold Created At
+
+            .col-xs-6
+              ul.list-group.clear-list
+                li.list-group-item.first-item
+                  span.pull-right {{ viewResource.model.email}}
+                  span.font-bold Email
+
+                li.list-group-item
+                  span.pull-right {{ viewResource.model.contactNumber}}
+                  span.font-bold Contact Number
+                li.list-group-item
+                  span.pull-right
+                    span.label.label-danger(*ngIf='viewResource.model.isLocked')
+                      | Yes
+                    span.label.label-success(*ngIf='!viewResource.model.isLocked')
+                      | No
+                  span.font-bold Is Locked?
+                li.list-group-item
+                  span.pull-right {{ viewResource.model.updatedAt | date:'medium' }}
+                  span.font-bold Updated At
+
+  .row
+    .col-xs-12
+      .ibox
+        .ibox-title
+          h5 Address
+        .ibox-content
+          .row
+            .col-xs-6
+              ul.list-group.clear-list
+                li.list-group-item.first-item
+                  span.pull-right {{ viewResource.model.address.addressLine1}}
+                  span.font-bold Address Line 1
+                li.list-group-item
+                  span.pull-right {{ viewResource.model.address.addressLine2}}
+                  span.font-bold Address Line 2
+                li.list-group-item
+                  span.pull-right {{ viewResource.model.address.town}}
+                  span.font-bold Town/City
+            .col-xs-6
+              ul.list-group.clear-list
+                li.list-group-item.first-item
+                  span.pull-right {{ viewResource.model.address.county}}
+                  span.font-bold County
+                li.list-group-item
+                  span.pull-right {{ viewResource.model.address.country}}
+                  span.font-bold Country
+                li.list-group-item
+                  span.pull-right {{ viewResource.model.address.postcode}}
+                  span.font-bold Postcode

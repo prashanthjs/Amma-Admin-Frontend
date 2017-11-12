@@ -1,0 +1,152 @@
+
+<div class="row wrapper border-bottom white-bg page-heading" *ngIf="viewResource.model">
+  <div class="col-sm-4">
+    <h2>{{viewResource.model.title}}</h2>
+    <ol class="breadcrumb">
+      <li><a routerLink="/">Home</a></li>
+      <li class="active"><a routerLink="/product/list">Products</a></li>
+      <li class="active"><strong>{{viewResource.model.name}}</strong></li>
+    </ol>
+  </div>
+  <div class="col-sm-8">
+    <div class="title-action">
+      <button class="btn btn-primary" (click)="open($event)" *appHasPrivilege="['update-product-basic-privilege']"><i class="glyphicon glyphicon-pencil m-r-xs"></i>Edit</button>
+      <button class="btn btn-success m-l-xs" (click)="openMart($event)" *appHasPrivilege="['update-product-mart-privilege']"><i class="glyphicon glyphicon-pencil m-r-xs"></i>Update mart</button>
+      <ng-container *appHasPrivilege="['remove-product-basic-privilege']">
+        <button class="btn btn-danger m-l-xs" , *ngIf="!viewResource.model.isLocked" mwlConfirmationPopover title="Delete product" [message]="'Do you want to remove ' + viewResource.model.name + '?'" (confirm)="remove()" placement="left"><i class="glyphicon glyphicon-remove m-r-xs"></i>Delete</button>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="viewResource.model">
+  <div class="col-lg-12">
+    <div class="wrapper wrapper-content">
+      <div class="animated fadeInRightBig">
+        <div class="row">
+          <div class="col-xs-3">
+            <div class="ibox">
+              <div class="ibox-content">
+                <div class="center-block clearfix">
+                  <carousel [interval]="5000" [noWrap]="false" *ngIf="viewResource.files &amp;&amp; viewResource.files.length">
+                    <slide template="ngFor let image of viewResource.files"><img class="col-xs-12 img-responsive" [src]="image.url" style="margin:auto;"></slide>
+                  </carousel><img src="http://placehold.it/250X250?text=Upload+image" *ngIf="!(viewResource.files?.length)">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-9">
+            <div class="ibox">
+              <div class="ibox-content">
+                <div class="row">
+                  <div class="col-xs-6">
+                    <ul class="list-group clear-list">
+                      <li class="list-group-item first-item"><span class="pull-right">{{ viewResource.model.name}}</span><span class="font-bold">Product name</span></li>
+                      <li class="list-group-item"><span class="pull-right">{{ viewResource.model.sku}}</span><span class="font-bold">SKU</span></li>
+                      <li class="list-group-item"><span class="pull-right">{{configService.currencySymbol}} {{ viewResource.model.price.sell}}</span><span class="font-bold">Sell price</span></li>
+                      <li class="list-group-item"><span class="pull-right">{{configService.currencySymbol}} {{ viewResource.model.price.cost}}</span><span class="font-bold">Cost price</span></li>
+                      <li class="list-group-item"><span class="pull-right"><span class="label label-success" *ngIf="viewResource.model.isActive">Active</span><span class="label label-danger" *ngIf="!viewResource.model.isActive">In Active</span></span><span class="font-bold">Status</span></li>
+                      <li class="list-group-item"><span class="pull-right">{{ viewResource.model.createdAt | date:'medium' }}</span><span class="font-bold">Created At</span></li>
+                      <li class="list-group-item"><span class="pull-right">{{ viewResource.model.updatedAt | date:'medium' }}</span><span class="font-bold">Updated At</span></li>
+                    </ul>
+                  </div>
+                  <div class="col-xs-6">
+                    <ul class="list-group clear-list">
+                      <li class="list-group-item first-item"><span class="pull-right">{{ viewResource.model.title}}</span><span class="font-bold">Title</span></li>
+                      <li class="list-group-item"><span class="pull-right">{{ viewResource.model.categories?.length ?  viewResource.model.categories.join(', '): ''}}</span><span class="font-bold">Categories</span></li>
+                      <li class="list-group-item"><span class="pull-right">{{configService.currencySymbol}} {{ viewResource.model.price.list}}</span><span class="font-bold">List price</span></li>
+                      <li class="list-group-item"><span class="pull-right">{{ viewResource.model.inventory.stock}}</span><span class="font-bold">Stock</span></li>
+                      <li class="list-group-item"><span class="pull-right">{{ viewResource.model.mart.join(', ')}}</span><span class="font-bold">Mart</span></li>
+                      <li class="list-group-item"><span class="pull-right"><span class="label label-danger" *ngIf="viewResource.model.isLocked">Yes</span><span class="label label-success" *ngIf="!viewResource.model.isLocked">No</span></span><span class="font-bold">Is Locked?</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="ibox">
+              <div class="ibox-title">
+                <h5>Inventory</h5>
+              </div>
+              <div class="ibox-content">
+                <div class="row">
+                  <div class="col-xs-6">
+                    <ul class="list-group clear-list">
+                      <li class="list-group-item first-item"><span class="pull-right">{{ viewResource.model.inventory.stock}}</span><span class="font-bold">Stock</span></li>
+                      <li class="list-group-item"><span class="pull-right">{{ viewResource.model.inventory.quantity.min}}</span><span class="font-bold">Min Qty</span></li>
+                    </ul>
+                  </div>
+                  <div class="col-xs-6">
+                    <ul class="list-group clear-list">
+                      <li class="list-group-item first-item"><span class="pull-right">{{ viewResource.model.inventory.quantity.step}}</span><span class="font-bold">Step</span></li>
+                      <li class="list-group-item"><span class="pull-right">{{ viewResource.model.inventory.quantity.max}}</span><span class="font-bold">Max Qty</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="ibox">
+              <div class="ibox-title">
+                <h5>Shipping</h5>
+              </div>
+              <div class="ibox-content">
+                <div class="row">
+                  <div class="col-xs-6">
+                    <ul class="list-group clear-list">
+                      <li class="list-group-item first-item"><span class="pull-right">{{ viewResource.model.shipping.weight}} {{configService.weightSymbol}}</span><span class="font-bold">Weight</span></li>
+                      <li class="list-group-item"><span class="pull-right">{{ viewResource.model.shipping.box.breadth}} {{configService.lengthSymbol}}</span><span class="font-bold">Box breadth</span></li>
+                    </ul>
+                  </div>
+                  <div class="col-xs-6">
+                    <ul class="list-group clear-list">
+                      <li class="list-group-item first-item"><span class="pull-right">{{ viewResource.model.shipping.box.width}} {{configService.lengthSymbol}}</span><span class="font-bold">Box width</span></li>
+                      <li class="list-group-item"><span class="pull-right">{{ viewResource.model.inventory.quantity.height}} {{configService.lengthSymbol}}</span><span class="font-bold">Box height</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="ibox">
+              <div class="ibox-title">
+                <h5>Product Tags</h5>
+              </div>
+              <div class="ibox-content">
+                <tag-input [ngModel]="viewResource.model.tags" disabled="true" placeholder="" secondaryPlaceholder=""></tag-input>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="ibox">
+              <div class="ibox-title">
+                <h5>Short description</h5>
+              </div>
+              <div class="ibox-content">
+                <div>{{viewResource.model.shortDescription}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="ibox">
+              <div class="ibox-title">
+                <h5>Description</h5>
+              </div>
+              <div class="ibox-content">
+                <div>{{viewResource.model.description}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+include ../../../layouts/view-helpers/common
+
+- formName = 'formService.form';
+- modalName = 'modalRef';
+- formSubmit = 'formService.submit'
+
++app-modal
+  +app-form(formName, formSubmit)
+    +app-modal-header(modalName)
+      | {{ formService.result?.name ? 'Edit payment status: '+ formService.result.name : 'Create payment status'}}
+    +app-modal-body
+      .row
+        .col-xs-6
+          - name = 'title'
+          - control = parseControl([formName, name])
+          - label = 'Title'
+          +app-form-input-group(control, name, label)
+
+        .col-xs-6
+          - name = 'frontendStatus'
+          - control = parseControl([formName, name])
+          - label = 'Frontend Status'
+          +app-form-input-group(control, name, label)
+
+      .row
+        .col-xs-6
+          - name = 'type'
+          - control = parseControl([formName, name])
+          +app-form-group(control)
+            label Type
+            select.form-control(formControlName=name)
+              option(*ngFor="let option of ['open', 'processing', 'successful', 'declined']", [value] = "option")
+                | {{option}}
+            +app-form-errors(control)
+              +app-form-error(control, 'required')
+                | Please select type
+
+    +app-modal-footer(formName, modalName)

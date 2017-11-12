@@ -1,0 +1,57 @@
+include ../../../layouts/view-helpers/common
+
+- formName = 'formService.form';
+- modalName = 'modalRef';
+- formSubmit = 'formService.submit'
+
++app-modal
+  +app-form(formName, formSubmit)
+    +app-modal-header(modalName)
+      | {{ formService.result?.name ? 'Edit user group: '+ formService.result.name : 'Create user group'}}
+    +app-modal-body
+      .row
+        .col-xs-12
+          - name = 'title'
+          - control = parseControl([formName, name])
+          - label = 'Title'
+          +app-form-input-group(control, name, label)
+
+
+          - name = 'isActive';
+          - control = parseControl([formName, name])
+          +app-form-group(control)
+            label  Is Active?
+            div.col-xs-12
+              label.radio-inline
+                input(type='radio', [value]='true', formControlName=name, [checked]= control + ".value === true")
+                |  Yes
+              label.radio-inline
+                input(type='radio', [value]='false',formControlName=name, [checked]= control + ".value === false")
+                |  No
+
+      .row(*ngIf='privileges')
+        .col-xs-12
+          .clearfix
+            .title.pull-left
+              h5 Privileges
+            .toolbar.pull-right
+              a.m-r-xs(href='javascript:void(0);', (click)='selectAll()') Select All
+              | /
+              a.m-l-xs(href='javascript:void(0);', (click)='unselectedAll()') Unselect All
+          hr
+
+        .col-xs-12
+          - control = parseControl([formName, 'privileges'])
+          .row(template="ngFor let group of privilegeGroups")
+            .col-xs-12
+              h4 {{group}}
+              hr
+            .col-xs-12.m-b-sm
+              .row
+                .col-xs-4(template="ngFor let privilege of privileges[group]; let i = index")
+                  label
+                    input(type='checkbox', value='{{privilege._id}}', name='roles_{{privilege._id}}', [checked]=control + ".value && " + control + ".value.indexOf(privilege._id)>=0", (change) = 'privilegeChanged(privilege._id, $event)')
+                    span.m-l-xs
+                      | {{privilege.title}}
+
+    +app-modal-footer(formName, modalName)

@@ -1,0 +1,87 @@
+include ../../../layouts/view-helpers/common
++app-page-title-with-model-with-custom-actions
+  .col-sm-4
+    h2 {{viewResource.model.title}}
+    ol.breadcrumb
+      li
+        a(routerLink='/') Home
+      li.active
+        a(routerLink='/category/list') Categories
+      li.active
+        strong {{viewResource.model.name}}
+
+  .col-sm-8
+    .title-action
+      button.btn.btn-primary((click)="open($event)", *appHasPrivilege="['update-category-basic-privilege']")
+        i.glyphicon.glyphicon-pencil.m-r-xs
+        | Edit
+      button.btn.btn-success.m-l-xs((click)="openMart($event)", *appHasPrivilege="['update-category-mart-privilege']")
+        i.glyphicon.glyphicon-pencil.m-r-xs
+        | Update mart
+
+      ng-container( *appHasPrivilege="['remove-category-basic-privilege']")
+        button.btn.btn-danger.m-l-xs(*ngIf='!viewResource.model.isLocked', mwlConfirmationPopover,title= "Delete category", [message] = "'Do you want to remove ' + viewResource.model.name + '?'",  (confirm)='remove()', placement='left')
+          i.glyphicon.glyphicon-remove.m-r-xs
+          | Delete
+
++app-page-content-with-model
+  .row
+    .col-xs-3
+      .ibox
+        .ibox-content
+          .center-block.clearfix
+            carousel([interval]='5000', [noWrap]='false', *ngIf = 'viewResource.files && viewResource.files.length')
+              slide(template = 'ngFor let image of viewResource.files')
+                img.col-xs-12.img-responsive([src]='image.url', style='margin:auto;')
+            img(src= 'http://placehold.it/250X250?text=Upload+image', *ngIf = '!(viewResource.files && viewResource.files.length)')
+
+    .col-xs-9
+      .ibox
+        .ibox-content
+          .row
+            .col-xs-6
+              ul.list-group.clear-list
+                li.list-group-item.first-item
+                  span.pull-right {{ viewResource.model.name}}
+                  span.font-bold Category name
+
+                li.list-group-item
+                  span.pull-right {{viewResource.model.parent}}
+                  span.font-bold Parent category
+                li.list-group-item
+                  span.pull-right
+                    span.label.label-success(*ngIf='viewResource.model.isActive')
+                      | Active
+                    span.label.label-danger(*ngIf='!viewResource.model.isActive')
+                      | In Active
+                  span.font-bold Status
+                li.list-group-item
+                  span.pull-right {{ viewResource.model.createdAt | date:'medium' }}
+                  span.font-bold Created At
+            .col-xs-6
+              ul.list-group.clear-list
+                li.list-group-item.first-item
+                  span.pull-right {{ viewResource.model.title}}
+                  span.font-bold Title
+                li.list-group-item
+                  span.pull-right {{ viewResource.model.mart.join(', ')}}
+                  span.font-bold Mart
+                li.list-group-item
+                  span.pull-right
+                    span.label.label-danger(*ngIf='viewResource.model.isLocked')
+                      | Yes
+                    span.label.label-success(*ngIf='!viewResource.model.isLocked')
+                      | No
+                  span.font-bold Is Locked?
+
+                li.list-group-item
+                  span.pull-right {{ viewResource.model.updatedAt | date:'medium' }}
+                  span.font-bold Updated At
+
+  .row(*ngIf='viewResource.model.description')
+    .col-xs-12
+      .ibox
+        .ibox-title
+          h5 Description
+        .ibox-content
+          | {{viewResource.model.description}}

@@ -1,0 +1,22 @@
+
+<div class="middle-box text-center loginscreen animated fadeInDown">
+  <div>
+    <div>
+      <h1 class="logo-name">IN+</h1>
+    </div>
+    <h3>Welcome to IN+</h3>
+    <p>Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.</p>
+    <p>Login in. To see it in action.</p>
+    <form [formGroup]="form" novalidate="" (ngSubmit)="submit($event)">
+      <alert type="danger" [dismissible]="true" *ngIf="error">{{ error }}</alert>
+      <fieldset class="form-group" [ngClass]="{'has-error': form.get('username').touched && form.get('username').errors}">
+        <input class="form-control" type="text" formControlName="username" placeholder="Username">
+      </fieldset>
+      <fieldset class="form-group" [ngClass]="{'has-error': form.get('password').touched && form.get('password').errors}">
+        <input class="form-control" type="password" formControlName="password" placeholder="Password">
+      </fieldset>
+      <button class="btn btn-primary block full-width m-b" type="submit" [disabled]="!form.valid">Login</button>
+    </form>
+    <p class="m-t"><small>Inspinia we app framework base on Bootstrap 3 © 2014</small></p>
+  </div>
+</div>

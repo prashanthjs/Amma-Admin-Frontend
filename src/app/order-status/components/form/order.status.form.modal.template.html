@@ -1,0 +1,49 @@
+
+<form [formGroup]="formService.form" novalidate="" (ngSubmit)="formService.submit($event)">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ formService.result?.name ? 'Edit order status: '+ formService.result.name : 'Create order status'}}
+    </h4>
+    <button class="close pull-right" type="button" aria-label="Close" (click)="modalRef.hide()"><span aria-hidden="true">×</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-12">
+        <app-form-messages></app-form-messages>
+      </div>
+      <div class="col-xs-12">
+        <div class="row">
+          <div class="col-xs-6">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('title').touched && formService.form.get('title').errors}">
+              <label>Title
+              </label>
+              <input class="form-control" type="text" formControlName="title">
+            </fieldset>
+          </div>
+          <div class="col-xs-6">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('frontendStatus').touched && formService.form.get('frontendStatus').errors}">
+              <label>Frontend Status
+              </label>
+              <input class="form-control" type="text" formControlName="frontendStatus">
+            </fieldset>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('type').touched && formService.form.get('type').errors}">
+              <label>Type</label>
+              <select class="form-control" formControlName="type">
+                <option *ngFor="let option of ['open', 'processing', 'successful', 'declined']" [value]="option">{{option}}</option>
+              </select>
+              <div *ngIf="formService.form.get('type').touched && formService.form.get('type').errors"><small class="text-danger" *ngIf="formService.form.get('type').hasError('required')">Please select type</small>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="submit" [disabled]="!formService.form.valid" (submit)="submit($event)">Save</button>
+    <button class="btn btn-secondary" type="button" (click)="modalRef.hide()">Close</button>
+  </div>
+</form>

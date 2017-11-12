@@ -1,0 +1,30 @@
+include ../../../layouts/view-helpers/common
+
++app-page-title()
+  .col-sm-4
+    h2 Manage shipping methods
+    ol.breadcrumb
+      li
+        a(routerLink='/') Home
+      li.active
+        strong Shipping methods
+  .col-sm-8
+    .title-action
+      button.btn.btn-primary((click)="open()", *appHasPrivilege="['create-shipping-method-basic-privilege']") Create shipping method
+
++app-page-content()
+  .ibox
+    .ibox-content
+      kendo-grid([data]='gridService.gridData', [pageSize] = "gridService.state.take", [skip]="gridService.state.skip", [pageable]="true", [sortable]="{ allowUnsort: true, mode: 'multiple' }", [sort] = "gridService.state.sort", [filter]="gridService.state.filter", [filterable] = "true",(dataStateChange) = "gridService.dataStateChange($event)")
+        kendo-grid-column(field='name', title='Shipping method name')
+        kendo-grid-column(field='title', title='Title')
+        kendo-grid-column(field='isActive', title ='Is Active?',  width='120', filter="boolean")
+          ng-template(kendoGridCellTemplate, let-dataItem)
+            input(type='checkbox', [checked]='dataItem.isActive', disabled='')
+        kendo-grid-command-column()
+          ng-template(kendoGridCellTemplate, let-dataItem)
+            button.btn.btn-primary((click)='open(dataItem._id)', *appHasPrivilege="['update-shipping-method-basic-privilege']")
+              i.glyphicon.glyphicon-pencil
+            ng-container(*appHasPrivilege="['remove-shipping-method-basic-privilege']")
+              button.btn.btn-danger.m-l-xs(*ngIf='!dataItem.isLocked', mwlConfirmationPopover,title= "Delete shipping method", [message] = "'Do you want to remove ' + dataItem.name + '?'",  (confirm)='remove(dataItem._id)', placement='left')
+                i.glyphicon.glyphicon-remove

@@ -1,0 +1,74 @@
+
+<form [formGroup]="formService.form" novalidate="" (ngSubmit)="formService.submit($event)">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ formService.result?.name ? 'Edit mart: '+ formService.result.name : 'Create mart'}}
+    </h4>
+    <button class="close pull-right" type="button" aria-label="Close" (click)="modalRef.hide()"><span aria-hidden="true">×</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-12">
+        <app-form-messages></app-form-messages>
+      </div>
+      <div class="col-xs-12">
+        <div class="row">
+          <div class="col-xs-4">
+            <div class="row">
+              <div class="col-xs-12 profile-pic" *ngIf="categoryFileUpload.files &amp;&amp; categoryFileUpload.files.length">
+                <carousel [interval]="5000" [noWrap]="false">
+                  <slide template="ngFor let image of categoryFileUpload.files"><img class="col-xs-12 img-responsive" [src]="image.url" style="margin:auto;"></slide>
+                </carousel>
+              </div>
+              <div class="col-xs-12 profile-pic" *ngIf="!(categoryFileUpload.files &amp;&amp; categoryFileUpload.files.length)"><img src="http://placehold.it/250X250?text=Upload+image"></div>
+            </div>
+            <div class="row" *ngIf="categoryFileUpload.files &amp;&amp; categoryFileUpload.files.length">
+              <div class="col-xs-4 thumbnail-wrapper" template="ngFor let image of categoryFileUpload.files"><img class="img-responsive img-thumbnail" [src]="image.url">
+                <button class="btn btn-danger btn-circle" type="button" mwlConfirmationPopover title="Delete Image" [message]="'Do you want to remove ' + image.fileName + '?'" (confirm)="categoryFileUpload.removeFile(image.fileName)"><i class="glyphicon glyphicon-remove"></i></button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <label class="btn btn-block btn-primary"><span class="glyphicon glyphicon-refresh spinning"></span>{{categoryFileUpload.loading?'Uploading...': 'Upload'}}
+                  <app-file-input #categoryFileUpload formControlName="imgToken" type="category"></app-file-input>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-8">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('title').touched && formService.form.get('title').errors}">
+              <label>Title
+              </label>
+              <input class="form-control" type="text" formControlName="title">
+            </fieldset>
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('parent').touched && formService.form.get('parent').errors}">
+              <label> Parent category</label>
+              <app-search-select-input formControlName="parent" [searchFunc]="searchCategory"></app-search-select-input>
+            </fieldset>
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('isActive').touched && formService.form.get('isActive').errors}">
+              <label> Is Active?</label>
+              <div class="col-xs-12">
+                <label class="radio-inline">
+                  <input type="radio" [value]="true" formControlName="isActive" [checked]="formService.form.get('isActive').value === true"> Yes
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" [value]="false" formControlName="isActive" [checked]="formService.form.get('isActive').value === false"> No
+                </label>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <h3>Description</h3>
+            <hr>
+            <textarea class="form-control" formControlName="description"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="submit" [disabled]="!formService.form.valid" (submit)="submit($event)">Save</button>
+    <button class="btn btn-secondary" type="button" (click)="modalRef.hide()">Close</button>
+  </div>
+</form>

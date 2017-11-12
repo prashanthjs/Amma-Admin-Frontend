@@ -1,0 +1,242 @@
+
+<form [formGroup]="formService.form" novalidate="" (ngSubmit)="formService.submit($event)">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ formService.result?.name ? 'Edit product: '+ formService.result.name : 'Create product'}}
+    </h4>
+    <button class="close pull-right" type="button" aria-label="Close" (click)="modalRef.hide()"><span aria-hidden="true">×</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-12">
+        <app-form-messages></app-form-messages>
+      </div>
+      <div class="col-xs-12">
+        <div class="row">
+          <div class="col-xs-4">
+            <div class="row">
+              <div class="col-xs-12 profile-pic" *ngIf="productFileUpload.files &amp;&amp; productFileUpload.files.length">
+                <carousel [interval]="5000" [noWrap]="false">
+                  <slide template="ngFor let image of productFileUpload.files"><img class="col-xs-12 img-responsive" [src]="image.url" style="margin:auto;"></slide>
+                </carousel>
+              </div>
+              <div class="col-xs-12 profile-pic" *ngIf="!(productFileUpload.files &amp;&amp; productFileUpload.files.length)"><img src="http://placehold.it/250X250?text=Upload+image"></div>
+            </div>
+            <div class="row" *ngIf="productFileUpload.files &amp;&amp; productFileUpload.files.length">
+              <div class="col-xs-4 thumbnail-wrapper" template="ngFor let image of productFileUpload.files"><img class="img-responsive img-thumbnail" [src]="image.url">
+                <button class="btn btn-danger btn-circle" type="button" mwlConfirmationPopover title="Delete Image" [message]="'Do you want to remove ' + image.fileName + '?'" (confirm)="productFileUpload.removeFile(image.fileName)"><i class="glyphicon glyphicon-remove"></i></button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <label class="btn btn-block btn-primary"><span class="glyphicon glyphicon-refresh spinning"></span>{{productFileUpload.loading?'Uploading...': 'Upload'}}
+                  <app-file-input #productFileUpload formControlName="imgToken" type="product"></app-file-input>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-8">
+            <div class="row">
+              <div class="col-xs-6">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('title').touched && formService.form.get('title').errors}">
+                  <label>Title
+                  </label>
+                  <input class="form-control" type="text" formControlName="title">
+                </fieldset>
+              </div>
+              <div class="col-xs-6">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('sku').touched && formService.form.get('sku').errors}">
+                  <label>SKU
+                  </label>
+                  <input class="form-control" type="text" formControlName="sku">
+                </fieldset>
+              </div>
+            </div>
+            <div class="row" formGroupName="price">
+              <div class="col-xs-4">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('price').get('sell').touched && formService.form.get('price').get('sell').errors}">
+                  <label>Sell Price</label>
+                  <div class="input-group"><span class="input-group-addon">{{ configService.currencySymbol }}</span>
+                    <input class="form-control" type="number" formControlName="sell">
+                  </div>
+                  <div *ngIf="formService.form.get('price').get('sell').touched && formService.form.get('price').get('sell').errors"><small class="text-danger" *ngIf="formService.form.get('price').get('sell').hasError('number')">Please enter number</small>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="col-xs-4">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('price').get('cost').touched && formService.form.get('price').get('cost').errors}">
+                  <label>Cost Price</label>
+                  <div class="input-group"><span class="input-group-addon">{{ configService.currencySymbol }}</span>
+                    <input class="form-control" type="number" formControlName="cost">
+                  </div>
+                  <div *ngIf="formService.form.get('price').get('cost').touched && formService.form.get('price').get('cost').errors"><small class="text-danger" *ngIf="formService.form.get('price').get('cost').hasError('number')">Please enter number</small>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="col-xs-4">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('price').get('list').touched && formService.form.get('price').get('list').errors}">
+                  <label>List Price</label>
+                  <div class="input-group"><span class="input-group-addon">{{ configService.currencySymbol }}</span>
+                    <input class="form-control" type="number" formControlName="list">
+                  </div>
+                  <div *ngIf="formService.form.get('price').get('list').touched && formService.form.get('price').get('list').errors"><small class="text-danger" *ngIf="formService.form.get('price').get('list').hasError('number')">Please enter number</small>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('categories').touched && formService.form.get('categories').errors}">
+                  <label> Categories</label>
+                  <app-search-select-input formControlName="categories" [maxItems]="10" [searchFunc]="searchCategories"></app-search-select-input>
+                  <div *ngIf="formService.form.get('categories').touched && formService.form.get('categories').errors"><small class="text-danger" *ngIf="formService.form.get('categories').hasError('required')">Please select categories</small>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="col-xs-6">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('isActive').touched && formService.form.get('isActive').errors}">
+                  <label> Is Active?</label>
+                  <div class="col-xs-12">
+                    <label class="radio-inline">
+                      <input type="radio" [value]="true" formControlName="isActive" [checked]="formService.form.get('isActive').value === true"> Yes
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" [value]="false" formControlName="isActive" [checked]="formService.form.get('isActive').value === false"> No
+                    </label>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('tags').touched && formService.form.get('tags').errors}">
+                  <label>Tags</label>
+                  <tag-input formControlName="tags" [modelAsStrings]="true"></tag-input>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="row" formGroupName="inventory">
+            <div class="col-xs-12">
+              <h4>Inventory</h4>
+              <hr>
+              <div class="row">
+                <div class="col-xs-6">
+                  <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('inventory').get('stock').touched && formService.form.get('inventory').get('stock').errors}">
+                    <label>Stock
+                    </label>
+                    <input class="form-control" type="number" formControlName="stock">
+                    <div *ngIf="formService.form.get('inventory').get('stock').touched && formService.form.get('inventory').get('stock').errors"><small class="text-danger" *ngIf="formService.form.get('inventory').get('stock').hasError('number')">Please enter number</small>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+              <div class="row" formGroupName="quantity">
+                <div class="col-xs-4">
+                  <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('inventory').get('quantity').get('min').touched && formService.form.get('inventory').get('quantity').get('min').errors}">
+                    <label>Minimum quantity
+                    </label>
+                    <input class="form-control" type="number" formControlName="min">
+                    <div *ngIf="formService.form.get('inventory').get('quantity').get('min').touched && formService.form.get('inventory').get('quantity').get('min').errors"><small class="text-danger" *ngIf="formService.form.get('inventory').get('quantity').get('min').hasError('number')">Please enter number</small>
+                    </div>
+                  </fieldset>
+                </div>
+                <div class="col-xs-4">
+                  <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('inventory').get('quantity').get('max').touched && formService.form.get('inventory').get('quantity').get('max').errors}">
+                    <label>Maximum quantity
+                    </label>
+                    <input class="form-control" type="number" formControlName="max">
+                    <div *ngIf="formService.form.get('inventory').get('quantity').get('max').touched && formService.form.get('inventory').get('quantity').get('max').errors"><small class="text-danger" *ngIf="formService.form.get('inventory').get('quantity').get('max').hasError('number')">Please enter number</small>
+                    </div>
+                  </fieldset>
+                </div>
+                <div class="col-xs-4">
+                  <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('inventory').get('quantity').get('step').touched && formService.form.get('inventory').get('quantity').get('step').errors}">
+                    <label>Quantity step
+                    </label>
+                    <input class="form-control" type="number" formControlName="step">
+                    <div *ngIf="formService.form.get('inventory').get('quantity').get('step').touched && formService.form.get('inventory').get('quantity').get('step').errors"><small class="text-danger" *ngIf="formService.form.get('inventory').get('quantity').get('step').hasError('number')">Please enter number</small>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12" formGroupName="shipping">
+            <h4>Shipping</h4>
+            <hr>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="row">
+                  <div class="col-xs-6">
+                    <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('shipping').get('weight').touched && formService.form.get('shipping').get('weight').errors}">
+                      <label>Weight</label>
+                      <div class="input-group">
+                        <input class="form-control" type="number" formControlName="weight"><span class="input-group-addon">{{configService.weightSymbol}}</span>
+                      </div>
+                      <div *ngIf="formService.form.get('shipping').get('weight').touched && formService.form.get('shipping').get('weight').errors"><small class="text-danger" *ngIf="formService.form.get('shipping').get('weight').hasError('number')">Please enter number</small>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+                <div class="row" formGroupName="box">
+                  <div class="col-xs-4">
+                    <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('shipping').get('box').get('length').touched && formService.form.get('shipping').get('box').get('length').errors}">
+                      <label>Length</label>
+                      <div class="input-group">
+                        <input class="form-control" type="number" formControlName="length"><span class="input-group-addon">{{configService.lengthSymbol}}</span>
+                      </div>
+                      <div *ngIf="formService.form.get('shipping').get('box').get('length').touched && formService.form.get('shipping').get('box').get('length').errors"><small class="text-danger" *ngIf="formService.form.get('shipping').get('box').get('length').hasError('number')">Please enter number</small>
+                      </div>
+                    </fieldset>
+                  </div>
+                  <div class="col-xs-4">
+                    <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('shipping').get('box').get('width').touched && formService.form.get('shipping').get('box').get('width').errors}">
+                      <label>Width</label>
+                      <div class="input-group">
+                        <input class="form-control" type="number" formControlName="width"><span class="input-group-addon">{{configService.lengthSymbol}}</span>
+                      </div>
+                      <div *ngIf="formService.form.get('shipping').get('box').get('width').touched && formService.form.get('shipping').get('box').get('width').errors"><small class="text-danger" *ngIf="formService.form.get('shipping').get('box').get('width').hasError('number')">Please enter number</small>
+                      </div>
+                    </fieldset>
+                  </div>
+                  <div class="col-xs-4">
+                    <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('shipping').get('box').get('height').touched && formService.form.get('shipping').get('box').get('height').errors}">
+                      <label>Height</label>
+                      <div class="input-group">
+                        <input class="form-control" type="number" formControlName="height"><span class="input-group-addon">{{configService.lengthSymbol}}</span>
+                      </div>
+                      <div *ngIf="formService.form.get('shipping').get('box').get('height').touched && formService.form.get('shipping').get('box').get('height').errors"><small class="text-danger" *ngIf="formService.form.get('shipping').get('box').get('height').hasError('number')">Please enter number</small>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <h4>Description</h4>
+            <hr>
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('shortDescription').touched && formService.form.get('shortDescription').errors}">
+              <label>Short Description</label>
+              <textarea class="form-control" formControlName="shortDescription"></textarea>
+            </fieldset>
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('description').touched && formService.form.get('description').errors}">
+              <label>Short Description</label>
+              <textarea class="form-control" formControlName="description"></textarea>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="submit" [disabled]="!formService.form.valid" (submit)="submit($event)">Save</button>
+    <button class="btn btn-secondary" type="button" (click)="modalRef.hide()">Close</button>
+  </div>
+</form>

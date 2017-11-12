@@ -1,0 +1,29 @@
+table.table.table-striped.table-bordered
+    thead
+        tr
+            th #
+            th Name
+            th Reference
+            th amount
+            th status
+            th created
+            th(*appHasPrivilege="['update-order-basic-privilege']")
+    tbody
+        template(ngFor let-item [ngForOf] = "viewResource.model.payment"  let-i = "index")
+            tr
+                td {{i+1}}
+                td {{item.name}}
+                td {{item.reference}}
+                td {{item.amount | currency: configService.currencyCode:true}}
+                td {{item.paymentStatus}}
+                td {{item.createdAt | date:'medium' }}
+                td(*appHasPrivilege="['update-order-basic-privilege']")
+                    button.btn.btn-primary.btn-sm((click)='openPayment(i)')
+                        i.glyphicon.glyphicon-pencil
+                    button.btn.btn-danger.btn-sm.m-l-xs(mwlConfirmationPopover,title= "Delete Payment", [message] = "'Do you want to remove?'",  (confirm)='removePayment(i)', placement='left')
+                        i.glyphicon.glyphicon-remove
+
+
+        tr(*ngIf = "!(viewResource.model.payment?.length)")
+            td(colspan=7)
+                p No payment details

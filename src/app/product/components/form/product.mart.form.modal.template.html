@@ -1,0 +1,32 @@
+
+<form [formGroup]="formService.form" novalidate="" (ngSubmit)="formService.submit($event, 'updateMart')">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">
+      <div *ngIf="formService.result">Edit product: {{formService.result?.name }}</div>
+    </h4>
+    <button class="close pull-right" type="button" aria-label="Close" (click)="modalRef.hide()"><span aria-hidden="true">×</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-12">
+        <app-form-messages></app-form-messages>
+      </div>
+      <div class="col-xs-12">
+        <div class="row">
+          <div class="col-xs-6">
+            <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('mart').touched && formService.form.get('mart').errors}">
+              <label> Marts</label>
+              <app-search-select-input formControlName="mart" maxItems="10" [searchFunc]="searchMart"></app-search-select-input>
+              <div *ngIf="formService.form.get('mart').touched && formService.form.get('mart').errors"><small class="text-danger" *ngIf="formService.form.get('mart').hasError('required')">Please select marts</small>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="submit" [disabled]="!formService.form.valid" (submit)="submit($event)">Save</button>
+    <button class="btn btn-secondary" type="button" (click)="modalRef.hide()">Close</button>
+  </div>
+</form>

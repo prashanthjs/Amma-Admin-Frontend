@@ -1,0 +1,20 @@
+table.table.table-striped.table-bordered
+    thead
+        tr
+            th #
+            th Name
+            th SKU
+            th
+    tbody
+        template(ngFor let-item [ngForOf] = "productsOutOfStock"  let-i = "index")
+            tr
+                td {{item._id}}
+                td {{item.name}}
+                td {{item.sku }}
+                td
+                    a.btn.btn-primary.btn-sm([routerLink]="['/product/list', item._id]")
+                        i.glyphicon.glyphicon-eye-open
+
+        tr(*ngIf != "!(productsOutOfStock && productsOutOfStock.length)")
+            td(colspan=5)
+                p No products out of stock

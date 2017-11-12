@@ -1,0 +1,34 @@
+- var parseControl = function(r){for(var n="",t=0;t<r.length;t++)0===t?n+=r[t]:n=n+".get('"+r[t]+"')";return n};
+
+mixin app-form(name, formSubmit)
+    - name = name ?name: "form"
+    form([formGroup]=name, novalidate='', (ngSubmit)= formSubmit + '($event)')&attributes(attributes)
+        block
+
+mixin app-form-mart(name, formSubmit)
+    - name = name ?name: "form"
+    form([formGroup]=name, novalidate='', (ngSubmit)= formSubmit + "($event, 'updateMart')")&attributes(attributes)
+        block
+
+mixin app-form-group(control)
+    fieldset.form-group([ngClass]!="{'has-error': " + control + ".touched && " + control + ".errors}")&attributes(
+    attributes)
+        block
+
+mixin app-form-errors(control)
+    div(*ngIf != control + ".touched && " + control + ".errors")&attributes(attributes)
+        block
+
+mixin app-form-error(control, errorType)
+    small.text-danger(*ngIf != control + ".hasError('" + errorType + "')")&attributes(attributes)
+        block
+
+mixin app-form-input-group(control, name, label, type)
+    if !type
+        - type = 'text'
+    +app-form-group(control)
+        if label
+            label
+                =label
+        input.form-control(type=type, formControlName=name)&attributes(attributes)
+        block

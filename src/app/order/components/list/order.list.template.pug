@@ -1,0 +1,28 @@
+include ../../../layouts/view-helpers/common
+
++app-page-title()
+  .col-sm-4
+    h2 Manage orders
+    ol.breadcrumb
+      li
+        a(routerLink='/') Home
+      li.active
+        strong Orders
+  .col-sm-8
+    .title-action
+      button.btn.btn-primary((click)="open()", *appHasPrivilege="['create-order-basic-privilege']") Create order
+
++app-page-content()
+  .ibox
+    .ibox-content
+      kendo-grid([data]='gridService.gridData', [pageSize] = "gridService.state.take", [skip]="gridService.state.skip", [pageable]="true", [sortable]="{ allowUnsort: true, mode: 'multiple' }", [sort] = "gridService.state.sort", [filter]="gridService.state.filter", [filterable] = "true",(dataStateChange) = "gridService.dataStateChange($event)")
+        kendo-grid-column(field='_id', title='Order id')
+        kendo-grid-column(field='user.firstName', title='First name')
+        kendo-grid-column(field='user.lastName', title='Last name')
+        kendo-grid-column(field='user.email', title='Email')
+        kendo-grid-column(field='orderStatus', title='status')
+        kendo-grid-column(field='referenceNumber', title='reference')
+        kendo-grid-command-column()
+          ng-template(kendoGridCellTemplate, let-dataItem)
+            a.btn.btn-warning.m-l-xs( [routerLink]="['/order/list', dataItem._id]", *appHasPrivilege="['view-order-basic-privilege']")
+              i.glyphicon.glyphicon-eye-open

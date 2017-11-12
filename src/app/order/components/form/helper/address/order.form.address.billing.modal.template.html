@@ -1,0 +1,81 @@
+
+<form [formGroup]="formService.form" novalidate="" (ngSubmit)="formService.submit($event)">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ formService.result?._id ? 'Edit order billing address: '+ formService.result._id : ''}}
+    </h4>
+    <button class="close pull-right" type="button" aria-label="Close" (click)="modalRef.hide()"><span aria-hidden="true">×</span></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-xs-12">
+        <app-form-messages></app-form-messages>
+      </div>
+      <div class="col-xs-12">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="row">
+              <div class="col-xs-6">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('addressLine1').touched && formService.form.get('addressLine1').errors}">
+                  <label>Address Line1
+                  </label>
+                  <input class="form-control" type="text" formControlName="addressLine1">
+                  <div *ngIf="formService.form.get('addressLine1').touched && formService.form.get('addressLine1').errors"><small class="text-danger" *ngIf="formService.form.get('addressLine1').hasError('required')">Please enter address line 1</small>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="col-xs-6">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('addressLine2').touched && formService.form.get('addressLine2').errors}">
+                  <label>Address Line2
+                  </label>
+                  <input class="form-control" type="text" formControlName="addressLine2">
+                </fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('town').touched && formService.form.get('town').errors}">
+                  <label>Town/City
+                  </label>
+                  <input class="form-control" type="text" formControlName="town">
+                  <div *ngIf="formService.form.get('town').touched && formService.form.get('town').errors"><small class="text-danger" *ngIf="formService.form.get('town').hasError('required')">Please enter town/city</small>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="col-xs-6">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('county').touched && formService.form.get('county').errors}">
+                  <label>County
+                  </label>
+                  <input class="form-control" type="text" formControlName="county">
+                </fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('country').touched && formService.form.get('country').errors}">
+                  <label>Country
+                  </label>
+                  <input class="form-control" type="text" formControlName="country">
+                  <div *ngIf="formService.form.get('country').touched && formService.form.get('country').errors"><small class="text-danger" *ngIf="formService.form.get('country').hasError('required')">Please enter country</small>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="col-xs-6">
+                <fieldset class="form-group" [ngClass]="{'has-error': formService.form.get('postcode').touched && formService.form.get('postcode').errors}">
+                  <label>Postcode
+                  </label>
+                  <input class="form-control" type="text" formControlName="postcode">
+                  <div *ngIf="formService.form.get('postcode').touched && formService.form.get('postcode').errors"><small class="text-danger" *ngIf="formService.form.get('postcode').hasError('required')">Please enter postcode</small>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="submit" [disabled]="!formService.form.valid" (submit)="submit($event)">Save</button>
+    <button class="btn btn-secondary" type="button" (click)="modalRef.hide()">Close</button>
+  </div>
+</form>

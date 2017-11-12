@@ -1,0 +1,34 @@
+include ../../../layouts/view-helpers/common
+
++app-page-title()
+  .col-sm-4
+    h2 Manage marts
+    ol.breadcrumb
+      li
+        a(routerLink='/') Home
+      li.active
+        strong Marts
+  .col-sm-8(*appHasPrivilege="['create-mart-basic-privilege']")
+    .title-action
+      button.btn.btn-primary((click)="open()") Create mart
+
++app-page-content()
+  .ibox
+    .ibox-content
+      kendo-grid([data]='gridService.gridData', [pageSize] = "gridService.state.take", [skip]="gridService.state.skip", [pageable]="true", [sortable]="{ allowUnsort: true, mode: 'multiple' }", [sort] = "gridService.state.sort", [filter]="gridService.state.filter", [filterable] = "true",(dataStateChange) = "gridService.dataStateChange($event)")
+        kendo-grid-column(field='name', title='Mart name')
+        kendo-grid-column(field='title', title='Title')
+        kendo-grid-column(field='email', title='Email')
+        kendo-grid-column(field='contactNumber', title='Contact Number')
+        kendo-grid-column(field='isActive', title ='Is Active?',  width='120', filter="boolean")
+          ng-template(kendoGridCellTemplate, let-dataItem)
+            input(type='checkbox', [checked]='dataItem.isActive', disabled='')
+        kendo-grid-command-column()
+          ng-template(kendoGridCellTemplate, let-dataItem)
+            button.btn.btn-primary((click)='open(dataItem._id)', *appHasPrivilege="['update-mart-basic-privilege']")
+              i.glyphicon.glyphicon-pencil
+            a.btn.btn-warning.m-l-xs( [routerLink]="['/mart/list', dataItem._id]")
+              i.glyphicon.glyphicon-eye-open
+            ng-container(*appHasPrivilege="['remove-mart-basic-privilege']")
+              button.btn.btn-danger.m-l-xs(*ngIf='!dataItem.isLocked', mwlConfirmationPopover,title= "Delete Mart", [message] = "'Do you want to remove ' + dataItem.name + '?'",  (confirm)='remove(dataItem._id)', placement='left')
+                i.glyphicon.glyphicon-remove

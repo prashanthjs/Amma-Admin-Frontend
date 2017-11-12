@@ -1,0 +1,179 @@
+include ../../../layouts/view-helpers/common
++app-page-title-with-model-with-custom-actions
+  .col-sm-4
+    h2 {{viewResource.model.title}}
+    ol.breadcrumb
+      li
+        a(routerLink='/') Home
+      li.active
+        a(routerLink='/order/list') Orders
+      li.active
+        strong {{viewResource.model._id}}
+
+  .col-sm-8
+    .title-action
+      button.btn.btn-primary((click)="open($event)", *appHasPrivilege="['update-order-basic-privilege']")
+        i.glyphicon.glyphicon-pencil.m-r-xs
+        | Edit
+      button.btn.btn-success.m-l-xs((click)="openMart($event)", *appHasPrivilege="['update-order-mart-privilege']")
+        i.glyphicon.glyphicon-pencil.m-r-xs
+        | Update mart
+      ng-container(*appHasPrivilege="['remove-order-basic-privilege']")
+        button.btn.btn-danger.m-l-xs(*ngIf='!viewResource.model.isLocked', mwlConfirmationPopover,title= "Delete order", [message] = "'Do you want to remove ' + viewResource.model.name + '?'",  (confirm)='remove()', placement='left')
+          i.glyphicon.glyphicon-remove.m-r-xs
+          | Delete
+
++app-page-content-with-model
+  .row
+    .col-xs-3
+      .ibox
+        .ibox-title
+          h5 Order Details
+          .ibox-tools
+            a((click)='edit()', *appHasPrivilege="['update-order-basic-privilege']", href='javascript:void(0)')
+              i.glyphicon.glyphicon-pencil
+        .ibox-content
+          ul.list-group.clear-list
+            li.list-group-item.first-item
+              span.pull-right {{ viewResource.model._id}}
+              span.font-bold Order Id
+            li.list-group-item
+              span.pull-right {{ viewResource.model.referenceNumber}}
+              span.font-bold Order reference number
+            li.list-group-item
+              span.pull-right {{ viewResource.model.orderStatus}}
+              span.font-bold Order status
+            li.list-group-item
+              span.pull-right {{ viewResource.model.mart}}
+              span.font-bold Mart
+    .col-xs-3
+      .ibox
+        .ibox-title
+          h5 User Details
+          .ibox-tools
+            a((click)='edit()', href='javascript:void(0)', *appHasPrivilege="['update-order-basic-privilege']")
+              i.glyphicon.glyphicon-pencil
+        .ibox-content
+          ul.list-group.clear-list
+            li.list-group-item.first-item
+              span.pull-right {{ viewResource.model.user.username}}
+              span.font-bold Username
+            li.list-group-item
+              span.pull-right {{ viewResource.model.user.firstName}} {{ viewResource.model.user.middleName}} {{ viewResource.model.user.lastName}}
+              span.font-bold Name
+            li.list-group-item
+              span.pull-right {{ viewResource.model.user.email}}
+              span.font-bold Email
+            li.list-group-item
+              span.pull-right {{ viewResource.model.user.contactNumber}}
+              span.font-bold Contact Number
+
+    .col-xs-3
+      .ibox
+        .ibox-title
+          h5 Billing Address
+          .ibox-tools
+            a((click)='openBillingAddress()', href='javascript:void(0)', *appHasPrivilege="['update-order-basic-privilege']")
+              i.glyphicon.glyphicon-pencil
+        .ibox-content
+          ul.list-group.clear-list(*ngIf="viewResource.model.address?.billing")
+            li.list-group-item.first-item
+              span.pull-right {{ viewResource.model.address.billing.addressLine1}} {{ viewResource.model.address.billing.addressLine2}}
+              span.font-bold Address
+            li.list-group-item
+              span.pull-right {{ viewResource.model.address.billing.town}}, {{ viewResource.model.address.billing.county}}
+              span.font-bold Town/City, County
+            li.list-group-item
+              span.pull-right {{ viewResource.model.address.billing.country}}
+              span.font-bold Country
+            li.list-group-item
+              span.pull-right {{ viewResource.model.address.billing.postcode}}
+              span.font-bold Postcode
+          div(*ngIf="!(viewResource.model.address?.billing)")
+            hr
+            p No billing address
+
+    .col-xs-3
+      .ibox
+        .ibox-title
+          h5 Shipping Address
+          .ibox-tools
+            a((click)='openShippingAddress()', href='javascript:void(0)', *appHasPrivilege="['update-order-basic-privilege']")
+              i.glyphicon.glyphicon-pencil
+        .ibox-content
+          ul.list-group.clear-list(*ngIf="viewResource.model.address?.shipping")
+            li.list-group-item.first-item
+              span.pull-right {{ viewResource.model.address.shipping.addressLine1}}, {{ viewResource.model.address.shipping.addressLine2}}
+              span.font-bold Address
+            li.list-group-item
+              span.pull-right {{ viewResource.model.address.shipping.town}} {{ viewResource.model.address.shipping.county}}
+              span.font-bold Town/City, County
+            li.list-group-item
+              span.pull-right {{ viewResource.model.address.shipping.country}}
+              span.font-bold Country
+            li.list-group-item
+              span.pull-right {{ viewResource.model.address.shipping.postcode}}
+              span.font-bold Postcode
+          div(*ngIf="!(viewResource.model.address?.shipping)")
+            hr
+            p No shipping address
+
+
+  .row
+    .col-xs-12
+      .ibox
+        .ibox-title
+          h5 Item details
+          .ibox-tools
+            button.btn.btn-primary.btn-sm((click)='openItem()', *appHasPrivilege="['update-order-basic-privilege']")
+              i.glyphicon.glyphicon-plus
+            .btn-group.m-l-xs(dropdown)
+              button.btn.btn-warning.btn-sm.dropdown-toggle(dropdownToggle,type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                i.glyphicon.glyphicon-menu-down
+              ul.dropdown-menu(*dropdownMenu)
+                li
+                  a.dropdown-item(href='javascript:void(0);', (click)='openOutItem()', *appHasPrivilege="['update-order-basic-privilege']") Add Order Out Item
+
+        .ibox-content.checkout-table
+          include helper/order-view-table
+
+
+  .row
+    .col-xs-6
+      .ibox
+        .ibox-title
+          h5 Payment details
+          .ibox-tools
+            button.btn.btn-primary.btn-sm((click)='openPayment()', *appHasPrivilege="['update-order-basic-privilege']")
+              i.glyphicon.glyphicon-plus
+        .ibox-content.checkout-table
+          include helper/order-payment-table
+    .col-xs-6
+      .ibox
+        .ibox-title
+          h5 Shipping details
+          .ibox-tools
+            button.btn.btn-primary.btn-sm((click)='openShipping()', *appHasPrivilege="['update-order-basic-privilege']")
+              i.glyphicon.glyphicon-plus
+        .ibox-content.checkout-table
+          include helper/order-shipping-table
+
+  .row
+    .col-xs-6
+      .ibox
+        .ibox-title
+          h5 Customer Notes
+          .ibox-tools
+            button.btn.btn-primary.btn-sm((click)='openNotes()', *appHasPrivilege="['update-order-basic-privilege']")
+              i.glyphicon.glyphicon-pencil
+        .ibox-content.checkout-table
+          | {{viewResource.model.notes?.customer}}
+    .col-xs-6
+      .ibox
+        .ibox-title
+          h5 Staff Notes
+          .ibox-tools
+            button.btn.btn-primary.btn-sm((click)='openNotes()', *appHasPrivilege="['update-order-basic-privilege']")
+              i.glyphicon.glyphicon-pencil
+        .ibox-content.checkout-table
+          | {{viewResource.model.notes?.staff}}

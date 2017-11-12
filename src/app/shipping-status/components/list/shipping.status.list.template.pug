@@ -1,0 +1,29 @@
+include ../../../layouts/view-helpers/common
+
++app-page-title()
+  .col-sm-4
+    h2 Manage shipping status
+    ol.breadcrumb
+      li
+        a(routerLink='/') Home
+      li.active
+        strong Shipping status
+  .col-sm-8
+    .title-action
+      button.btn.btn-primary((click)="open()", *appHasPrivilege="['create-shipping-status-basic-privilege']") Create shipping status
+
++app-page-content()
+  .ibox
+    .ibox-content
+      kendo-grid([data]='gridService.gridData', [pageSize] = "gridService.state.take", [skip]="gridService.state.skip", [pageable]="true", [sortable]="{ allowUnsort: true, mode: 'multiple' }", [sort] = "gridService.state.sort", [filter]="gridService.state.filter", [filterable] = "true",(dataStateChange) = "gridService.dataStateChange($event)")
+        kendo-grid-column(field='name', title='Shipping status name')
+        kendo-grid-column(field='title', title='Title')
+        kendo-grid-column(field='frontendStatus', title='Frontend Status')
+        kendo-grid-column(field='type', title='Type')
+        kendo-grid-command-column()
+          ng-template(kendoGridCellTemplate, let-dataItem)
+            button.btn.btn-primary((click)='open(dataItem._id)', *appHasPrivilege="['update-shipping-status-basic-privilege']")
+              i.glyphicon.glyphicon-pencil
+            ng-container(*appHasPrivilege="['remove-shipping-status-basic-privilege']")
+              button.btn.btn-danger.m-l-xs(*ngIf='!dataItem.isLocked', mwlConfirmationPopover,title= "Delete shipping status", [message] = "'Do you want to remove ' + dataItem.name + '?'",  (confirm)='remove(dataItem._id)', placement='left')
+                i.glyphicon.glyphicon-remove

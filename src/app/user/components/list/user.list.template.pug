@@ -1,0 +1,35 @@
+include ../../../layouts/view-helpers/common
+
++app-page-title()
+  .col-sm-4
+    h2 Manage users
+    ol.breadcrumb
+      li
+        a(routerLink='/') Home
+      li.active
+        strong Users
+  .col-sm-8
+    .title-action
+      button.btn.btn-primary((click)="open()", *appHasPrivilege="['create-user-basic-privilege']") Create user
+
++app-page-content()
+  .ibox
+    .ibox-content
+      kendo-grid([data]='gridService.gridData', [pageSize] = "gridService.state.take", [skip]="gridService.state.skip", [pageable]="true", [sortable]="{ allowUnsort: true, mode: 'multiple' }", [sort] = "gridService.state.sort", [filter]="gridService.state.filter", [filterable] = "true",(dataStateChange) = "gridService.dataStateChange($event)")
+        kendo-grid-column(field='username', title='Username')
+        kendo-grid-column(field='firstName', title='FirstName')
+        kendo-grid-column(field='lastName', title='Last Name')
+        kendo-grid-column(field='email', title='Email')
+        kendo-grid-column(field='contactNumber', title='Contact Number')
+        kendo-grid-column(field='isActive', title ='Is Active?',  width='120', filter="boolean")
+          ng-template(kendoGridCellTemplate, let-dataItem)
+            input(type='checkbox', [checked]='dataItem.isActive', disabled='')
+        kendo-grid-command-column()
+          ng-template(kendoGridCellTemplate, let-dataItem)
+            button.btn.btn-primary((click)='open(dataItem._id)', *appHasPrivilege="['update-user-basic-privilege']")
+              i.glyphicon.glyphicon-pencil
+            a.btn.btn-warning.m-l-xs( [routerLink]="['/user/list', dataItem._id]")
+              i.glyphicon.glyphicon-eye-open
+            ng-container(*appHasPrivilege="['remove-user-basic-privilege']")
+              button.btn.btn-danger.m-l-xs(mwlConfirmationPopover,title= "Delete user", [message] = "'Do you want to remove ' + dataItem.username + '?'",  (confirm)='remove(dataItem._id)', placement='left')
+                i.glyphicon.glyphicon-remove

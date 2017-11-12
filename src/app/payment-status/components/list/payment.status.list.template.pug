@@ -1,0 +1,29 @@
+include ../../../layouts/view-helpers/common
+
++app-page-title()
+  .col-sm-4
+    h2 Manage payment status
+    ol.breadcrumb
+      li
+        a(routerLink='/') Home
+      li.active
+        strong Payment status
+  .col-sm-8
+    .title-action
+      button.btn.btn-primary((click)="open()", *appHasPrivilege="['create-payment-status-basic-privilege']") Create payment status
+
++app-page-content()
+  .ibox
+    .ibox-content
+      kendo-grid([data]='gridService.gridData', [pageSize] = "gridService.state.take", [skip]="gridService.state.skip", [pageable]="true", [sortable]="{ allowUnsort: true, mode: 'multiple' }", [sort] = "gridService.state.sort", [filter]="gridService.state.filter", [filterable] = "true",(dataStateChange) = "gridService.dataStateChange($event)")
+        kendo-grid-column(field='name', title='Payment status name')
+        kendo-grid-column(field='title', title='Title')
+        kendo-grid-column(field='frontendStatus', title='Frontend Status')
+        kendo-grid-column(field='type', title='Type')
+        kendo-grid-command-column()
+          ng-template(kendoGridCellTemplate, let-dataItem)
+            button.btn.btn-primary((click)='open(dataItem._id)', *appHasPrivilege="['update-payment-status-basic-privilege']")
+              i.glyphicon.glyphicon-pencil
+            ng-container(*appHasPrivilege="['remove-payment-status-basic-privilege']")
+              button.btn.btn-danger.m-l-xs(*ngIf='!dataItem.isLocked', mwlConfirmationPopover,title= "Delete payment status", [message] = "'Do you want to remove ' + dataItem.name + '?'",  (confirm)='remove(dataItem._id)', placement='left')
+                i.glyphicon.glyphicon-remove

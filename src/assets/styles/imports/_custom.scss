@@ -1,0 +1,124 @@
+/* Only demo */
+@media (max-width: 1000px) {
+  .welcome-message {
+    display: none;
+  }
+}
+
+// https://www.bootply.com/128062
+.glyphicon-refresh-animate {
+  -animation: spin .7s infinite linear;
+  -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: scale(1) rotate(0deg);
+  }
+  to {
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+.profile-pic {
+  padding-bottom: 10px;
+}
+
+input[type="file"][ng2fileselect  ] {
+  display: none;
+}
+
+.thumbnail-wrapper .btn-circle {
+  position: absolute;
+  top: -4px;
+  right: 10px;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.428571429;
+  border-radius: 15px;
+}
+
+.btn-circle.btn-lg {
+  width: 50px;
+  height: 50px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 25px;
+}
+
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  font-size: 24px;
+  line-height: 1.33;
+  border-radius: 35px;
+}
+
+.tag {
+  font-size: 14px;
+  padding: .3em .4em .4em;
+  margin: 0 .1em;
+}
+
+.tag a {
+  color: #bbb;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.tag a:hover {
+  opacity: 1.0
+}
+
+.tag .remove {
+  vertical-align: bottom;
+  top: 0;
+}
+
+.tag a {
+  margin: 0 0 0 .3em;
+}
+
+.tag a .glyphicon-white {
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.popover-content {
+  min-width: 250px;
+}
+
+.ng2-dropdown-menu {
+  z-index: 3000 !important;
+}
+
+.list-group.clear-list .list-group-item.first-item {
+  border-top: 0px;
+}
+
+.checkout-table .table > tbody > tr.product > td {
+  border-top-width: 5px;
+}
+
+
+.daterangepicker {
+  width: 670px !important;
+  margin-right: 10px;
+}
